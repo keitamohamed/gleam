@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -12,14 +13,25 @@ import javax.persistence.*;
 public class Address {
 
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long addressID;
+    @NotBlank(message = "Enter street address")
     private String street;
+    @NotBlank(message = "Enter city")
     private String city;
+    @NotBlank(message = "Enter ")
     private String state;
     private int zip;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "adminID")
-    @JsonBackReference(value = "address")
-    private Admin address;
+    @JsonBackReference(value = "aAddress")
+    private Admin aAddress;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "studentID")
+    @JsonBackReference(value = "sAddress")
+    private Student sAddress;
+
+
 }
