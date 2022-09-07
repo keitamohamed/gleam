@@ -1,6 +1,7 @@
 package com.keita.gleam.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -21,10 +23,10 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(value = {"studentID"}, allowGetters = true)
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long studentID;
     @NotBlank(message = "Enter a valid name")
     private String name;
@@ -36,10 +38,12 @@ public class Student {
     @NotBlank(message = "Enter a valid phone number")
     private String phone;
 
+    @Valid
     @OneToOne(mappedBy = "studentAuth", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference(value = "studentAuth")
     private Authenticate studentAuth;
 
+    @Valid
     @OneToMany(mappedBy = "sAddress", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonManagedReference(value = "sAddress")
     private List<Address> sAddress;

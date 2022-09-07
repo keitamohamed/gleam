@@ -18,4 +18,5 @@ public class Grade {
     @Id
     private Long gradeID;
     private String finalGrade;
+
 }

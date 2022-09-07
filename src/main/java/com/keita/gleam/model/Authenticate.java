@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -18,7 +19,11 @@ public class Authenticate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long authID;
+    @Column(updatable = false, unique = true)
+    @NotBlank(message = "Enter valid email address")
     private String email;
+    @Column(columnDefinition = "LONGBLOB")
+    @NotBlank(message = "Enter a valid password")
     private String password;
 
     @OneToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
