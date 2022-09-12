@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -19,25 +20,27 @@ public class Authenticate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long authID;
+
+    @NotBlank(message = "Email address cannot be blank")
+    @Email(message = "Email is not a valid email address.",
+            regexp = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")
     @Column(updatable = false, unique = true)
-    @NotBlank(message = "Enter valid email address")
     private String email;
-    @Column(columnDefinition = "LONGBLOB")
     @NotBlank(message = "Enter a valid password")
     private String password;
 
-    @OneToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "adminID")
-    @JsonBackReference(value = "adminAuth")
-    private Admin adminAuth;
+    @JsonBackReference(value = "auth")
+    private Admin auth;
 
-    @OneToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "teacherID")
-    @JsonBackReference(value = "teacherAuth")
-    private Teacher teacherAuth;
+    @JsonBackReference(value = "teacher")
+    private Teacher teacher;
 
-    @OneToOne(optional = true, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "studentID")
-    @JsonBackReference(value = "studentAuth")
-    private Student studentAuth;
+    @JsonBackReference(value = "sAuth")
+    private Student sAuth;
 }

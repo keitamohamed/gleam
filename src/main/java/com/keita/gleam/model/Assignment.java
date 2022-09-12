@@ -30,5 +30,6 @@ public class Assignment {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "courseID")
     @JsonBackReference(value = "assignment")
-    private Assignment assignment;
+    private Courses assignment;
+
 }

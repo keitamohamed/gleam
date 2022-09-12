@@ -39,9 +39,9 @@ public class Student {
     private String phone;
 
     @Valid
-    @OneToOne(mappedBy = "studentAuth", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "studentAuth")
-    private Authenticate studentAuth;
+    @OneToOne(mappedBy = "sAuth", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "sAuth")
+    private Authenticate sAuth;
 
     @Valid
     @OneToMany(mappedBy = "sAddress", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -51,5 +51,5 @@ public class Student {
     @OneToMany(mappedBy = "classes", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     @JsonManagedReference(value = "classes")
-    private Set<Courses> classes;
+    private List<Courses> classes;
 }

@@ -1,5 +1,6 @@
 package com.keita.gleam.controller;
 
+import com.keita.gleam.mapper.ResponseMessage;
 import com.keita.gleam.model.Admin;
 import com.keita.gleam.service.AdminDOAImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
@@ -24,11 +28,31 @@ public class AdminController {
 
     @PostMapping(value = {"/save"},
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> save(
+    public ResponseEntity<?> save(
             @Valid
             @RequestBody
             Admin admin,
             BindingResult bindingResult ) {
         return adminDOAImp.save(admin, bindingResult);
+    }
+
+    @PutMapping(
+            value = {"/update/{id}"},
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<ResponseMessage> updateAdmin(@RequestBody Admin admin, @PathVariable Long id) {
+        return adminDOAImp.update(id, admin);
+    }
+    @GetMapping(value = {"/find_by_id/{id}"})
+    public Optional<Admin> findByID(@PathVariable Long id, HttpServletResponse response) {
+        return adminDOAImp.findByID(id, response);
+    }
+    @DeleteMapping(value = {"/delete_admin/{id}"})
+    public ResponseEntity<?> deleteAdmin(@PathVariable Long id) {
+        return adminDOAImp.deleteAdmin(id);
+    }
+    @GetMapping("/admins")
+    public List<Admin> adminList(HttpServletResponse response) {
+        return adminDOAImp.adminList(response);
     }
 }

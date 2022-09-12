@@ -25,7 +25,6 @@ import java.util.List;
 public class Teacher {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long teacherID;
     @NotBlank(message = "Enter a valid name")
     private String name;
@@ -38,11 +37,12 @@ public class Teacher {
     private String phone;
 
     @Valid
-    @OneToOne(mappedBy = "teacherAuth", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "teacherAuth")
-    private Authenticate teacherAuth;
+    @OneToOne(mappedBy = "teacher", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "teacher")
+    private Authenticate auth;
 
-    @OneToMany(mappedBy = "tAddress", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "tAddress")
-    private List<Address> tAddress;
+    @Valid
+    @OneToMany(mappedBy = "teacher", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "teacher")
+    private List<Address> address;
 }

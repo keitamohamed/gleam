@@ -40,8 +40,7 @@ public class Courses {
     private Admin courses;
 
     @OneToMany(mappedBy = "assignment", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonIgnore
     @Fetch(value = FetchMode.SUBSELECT)
     @JsonManagedReference(value = "assignment")
-    private Set<Assignment> assignment;
+    private List<Assignment> assignment;
 }
