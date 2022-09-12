@@ -6,10 +6,8 @@ import lombok.*;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+import java.math.BigInteger;
 
 @Entity
 @Data
@@ -28,9 +26,8 @@ public class Address {
     private String city;
     @NotBlank(message = "Enter a valid state")
     private String state;
-    @Min(value = 4, message = "Zip code must be 5 digit number")
-    @Max(value = 94957, message = "Zip code cannot be more then 5 digit number")
-    private int zip;
+    @Size(min = 5, max = 5, message = "Zip code must be a five digit number")
+    private String zip;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "adminID")
@@ -44,6 +41,6 @@ public class Address {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "studentID")
-    @JsonBackReference(value = "sAddress")
-    private Student sAddress;
+    @JsonBackReference(value = "student")
+    private Student student;
 }

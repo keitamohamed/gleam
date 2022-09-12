@@ -28,8 +28,8 @@ public class AdminDOAImp {
     }
 
     public ResponseEntity<?> save(Admin admin, BindingResult bindingResult) {
-        if (bindingResult.hasErrors() || !NotEmptyAddressFields.isAddressValid(admin.getAddress())) {
-            return InvalidInput.error(bindingResult, admin.getAddress(), HttpStatus.NOT_ACCEPTABLE);
+        if (bindingResult.hasErrors()) {
+            return InvalidInput.error(bindingResult, HttpStatus.NOT_ACCEPTABLE);
         }
 
         long id = Long.parseLong(Util.generateSixDigit());

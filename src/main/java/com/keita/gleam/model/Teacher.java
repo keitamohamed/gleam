@@ -11,7 +11,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
@@ -41,8 +43,7 @@ public class Teacher {
     @JsonManagedReference(value = "teacher")
     private Authenticate auth;
 
-    @Valid
     @OneToMany(mappedBy = "teacher", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonManagedReference(value = "teacher")
-    private List<Address> address;
+    private List<@NotNull(message = "At least one valid address is required") @Valid Address> address;
 }

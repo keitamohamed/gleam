@@ -13,9 +13,9 @@ public class NotEmptyAddressFields {
                     address.getState().trim().isEmpty()) {
                 return false;
             }
-            if (address.getZip() == 0 || String.valueOf(address.getZip()).length() != 5) {
-                return false;
-            }
+//            if (address.getZip() || String.valueOf(address.getZip()).length() != 5) {
+//                return false;
+//            }
         }
         return true;
     }

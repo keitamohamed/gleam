@@ -4,6 +4,7 @@ import com.keita.gleam.doa.TeacherDOA;
 import com.keita.gleam.mapper.InvalidInput;
 import com.keita.gleam.mapper.Message;
 import com.keita.gleam.mapper.ResponseMessage;
+import com.keita.gleam.model.Address;
 import com.keita.gleam.model.Authenticate;
 import com.keita.gleam.model.Teacher;
 import com.keita.gleam.util.Util;
@@ -30,8 +31,8 @@ public class TeacherDOAImp {
 
     public ResponseEntity<?> save(Teacher teacher, BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors() || !NotEmptyAddressFields.isAddressValid(teacher.getAddress())) {
-            return InvalidInput.error(bindingResult, teacher.getAddress(), HttpStatus.NOT_ACCEPTABLE);
+        if (bindingResult.hasErrors()) {
+            return InvalidInput.error(bindingResult, HttpStatus.NOT_ACCEPTABLE);
         }
         long id = Long.parseLong(Util.generateSixDigit());
         Optional<Teacher> findTeacher = teacherDOA.findById(id);
@@ -42,6 +43,8 @@ public class TeacherDOAImp {
         teacher.setTeacherID(id);
         Authenticate authenticate = teacher.getAuth();
         authenticate.setTeacher(teacher);
+        List<Address> address = teacher.getAddress();
+        teacher.setAddress(address);
         Teacher saveResponse = teacherDOA.save(teacher);
         String message = String.format("A new teacher have been created with an id %s", saveResponse.getTeacherID());
         ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
@@ -53,7 +56,7 @@ public class TeacherDOAImp {
         String message;
 
         if (findTeacher.isEmpty()) {
-            message = String.format("There are no admin with an id %s", id);
+            message = String.format("There are no student with an id %s", id);
             ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
             return new ResponseEntity<>(responseMessage, HttpStatus.OK);
         }
@@ -96,7 +99,7 @@ public class TeacherDOAImp {
     public Teacher findAdminByID(Long id, HttpServletResponse response) {
         Teacher findTeacher = findByID(id);
         if (findTeacher == null) {
-            String message = String.format("Could not find admin with an id %s", id);
+            String message = String.format("Could not find teacher with an id %s", id);
             Message.noFoundException(message, HttpStatus.OK, response);
         }
         return findTeacher;

@@ -11,6 +11,7 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
@@ -37,10 +38,10 @@ public class Admin {
     @Pattern(regexp = "(^$|[0-9]{10})", message = "Phone number must be 10 digit number")
     private String phone;
 
-    @Valid
+
     @OneToMany(mappedBy = "admin", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonManagedReference(value = "admin")
-    private List<Address> address;
+    private List<@NotNull(message = "At least one valid address is required") @Valid Address> address;
 
     @Valid
     @OneToOne(mappedBy = "auth", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

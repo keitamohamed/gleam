@@ -16,7 +16,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -39,14 +38,13 @@ public class Student {
     private String phone;
 
     @Valid
-    @OneToOne(mappedBy = "sAuth", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "sAuth")
-    private Authenticate sAuth;
+    @OneToOne(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "student")
+    private Authenticate auth;
 
-    @Valid
-    @OneToMany(mappedBy = "sAddress", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "sAddress")
-    private List<Address> sAddress;
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "student")
+    private List<@NotNull(message = "At least one valid address is required") @Valid Address> address;
 
     @OneToMany(mappedBy = "classes", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
