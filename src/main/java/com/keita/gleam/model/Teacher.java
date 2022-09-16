@@ -17,6 +17,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -45,5 +46,8 @@ public class Teacher {
 
     @OneToMany(mappedBy = "teacher", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonManagedReference(value = "teacher")
-    private List<@NotNull(message = "At least one valid address is required") @Valid Address> address;
+    private Set<@NotNull(message = "At least one valid address is required") @Valid Address> address;
+
+    @ManyToMany(mappedBy = "teachers", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Course> courses;
 }

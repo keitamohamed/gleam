@@ -1,13 +1,13 @@
 package com.keita.gleam.service;
 
 import com.keita.gleam.doa.AdminDOA;
+import com.keita.gleam.doa.CourseDOA;
 import com.keita.gleam.mapper.InvalidInput;
 import com.keita.gleam.mapper.Message;
 import com.keita.gleam.mapper.ResponseMessage;
 import com.keita.gleam.model.Admin;
 import com.keita.gleam.model.Authenticate;
 import com.keita.gleam.util.Util;
-import com.keita.gleam.validate.NotEmptyAddressFields;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +40,7 @@ public class AdminDOAImp {
         }
         admin.setAdminID(id);
         Authenticate authenticate = admin.getAuth();
-        authenticate.setAuth(admin);
+        authenticate.setAdmin(admin);
         Admin saveResponse = adminDOA.save(admin);
         String message = String.format("A new admin have been created with an id %s", saveResponse.getAdminID());
         ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());

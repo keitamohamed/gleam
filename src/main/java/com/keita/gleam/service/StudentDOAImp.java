@@ -5,9 +5,9 @@ import com.keita.gleam.mapper.InvalidInput;
 import com.keita.gleam.mapper.Message;
 import com.keita.gleam.mapper.ResponseMessage;
 import com.keita.gleam.model.Authenticate;
+import com.keita.gleam.model.Course;
 import com.keita.gleam.model.Student;
 import com.keita.gleam.util.Util;
-import com.keita.gleam.validate.NotEmptyAddressFields;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +22,12 @@ import java.util.Optional;
 public class StudentDOAImp {
 
     private final StudentDOA studentDOA;
+    private final CourseDOAImp courseDOAImp;
 
     @Autowired
-    public StudentDOAImp(StudentDOA studentDOA) {
+    public StudentDOAImp(StudentDOA studentDOA, CourseDOAImp courseDOAImp) {
         this.studentDOA = studentDOA;
+        this.courseDOAImp = courseDOAImp;
     }
 
     public ResponseEntity<?> save(Student student, BindingResult bindingResult) {
@@ -44,6 +46,25 @@ public class StudentDOAImp {
         Student saveResponse = studentDOA.save(student);
         String message = String.format("A new student have been created with an id %s", saveResponse.getStudentID());
         ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> addCourse(Long id, Long courseID, HttpServletResponse response) {
+        Optional<Student> findStudent = findByID(id);
+        Course courses = courseDOAImp.findCourseByID(courseID, response);
+        ResponseMessage responseMessage;
+        if (findStudent.isEmpty()) {
+            String message = String.format("No Student found with an id %s", courseID);
+            responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
+            return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+        }
+        findStudent.ifPresent(student -> student.addNewCourse(courses));
+        courses.AddNewStudent(findStudent.get());
+
+        courseDOAImp.update(courses);
+        Student saveResponse = studentDOA.save(findStudent.get());
+        String message = String.format("%s have been add in %s class", saveResponse.getName(), courses.getCourseName());
+        responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
@@ -94,7 +115,7 @@ public class StudentDOAImp {
             String message = String.format("Could not find student with an id %s", id);
             Message.noFoundException(message, HttpStatus.OK, response);
         }
-        return student.get();
+        return student.orElse(new Student());
     }
     private Optional<Student> findByID(Long id) {
         return studentDOA.findById(id);

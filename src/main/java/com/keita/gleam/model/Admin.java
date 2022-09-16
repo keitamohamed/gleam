@@ -41,15 +41,15 @@ public class Admin {
 
     @OneToMany(mappedBy = "admin", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonManagedReference(value = "admin")
-    private List<@NotNull(message = "At least one valid address is required") @Valid Address> address;
+    private Set<@NotNull(message = "At least one valid address is required") @Valid Address> address;
 
     @Valid
-    @OneToOne(mappedBy = "auth", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "auth")
+    @OneToOne(mappedBy = "admin", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "admin")
     private Authenticate auth;
 
-    @OneToMany(mappedBy = "courses", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "admin", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
-    @JsonManagedReference(value = "courses")
+    @JsonManagedReference(value = "admin")
     private Set<Courses> courses;
 }

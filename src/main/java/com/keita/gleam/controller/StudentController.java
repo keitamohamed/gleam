@@ -1,6 +1,8 @@
 package com.keita.gleam.controller;
 
+import com.keita.gleam.model.Courses;
 import com.keita.gleam.model.Student;
+import com.keita.gleam.service.CourseDOAImp;
 import com.keita.gleam.service.StudentDOAImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -32,6 +34,11 @@ public class StudentController {
             BindingResult bindingResult
             ) {
         return studentDOAImp.save(student, bindingResult);
+    }
+
+    @PutMapping(value = {"/add_course/{id}/{cid}"})
+    public ResponseEntity<?> addCourse(@PathVariable Long id, @PathVariable Long cid, HttpServletResponse response) {
+        return studentDOAImp.addCourse(id, cid, response);
     }
 
     @GetMapping(value = {"/find_by_id/{id}"})

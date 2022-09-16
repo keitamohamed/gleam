@@ -16,6 +16,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -44,10 +45,16 @@ public class Student {
 
     @OneToMany(mappedBy = "student", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonManagedReference(value = "student")
-    private List<@NotNull(message = "At least one valid address is required") @Valid Address> address;
+    private Set<@NotNull(message = "At least one valid address is required") @Valid Address> address;
 
-    @OneToMany(mappedBy = "classes", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JsonManagedReference(value = "classes")
-    private List<Courses> classes;
+    @ManyToMany(mappedBy = "students", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Course> courses;
+
+    public void addNewCourse(Course courses) {
+        addCourse(courses);
+    }
+
+    private void addCourse(Course newCourse) {
+        courses.add(newCourse);
+    }
 }

@@ -28,6 +28,7 @@ public class InvalidInput {
                 count += 1;
             } else {
                 errorMap.put(error.getField(), error.getDefaultMessage());
+                System.out.println(error.getField() + " Message: " + error.getDefaultMessage());
             }
             if (count == 4) {
                 count = 0;

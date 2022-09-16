@@ -11,15 +11,11 @@ public interface TeacherDOA extends CrudRepository<Teacher, Long> {
 
     @NonNull
     Teacher save(Teacher teacher);
-
     @Override
     Optional<Teacher> findById(Long aLong);
-
     Teacher getTeacherByTeacherID(Long id);
-
     @NonNull
     List<Teacher>findAll();
-
     @Override
     void delete(Teacher entity);
 }

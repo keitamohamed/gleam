@@ -18,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class TeacherDOAImp {
@@ -43,7 +44,7 @@ public class TeacherDOAImp {
         teacher.setTeacherID(id);
         Authenticate authenticate = teacher.getAuth();
         authenticate.setTeacher(teacher);
-        List<Address> address = teacher.getAddress();
+        Set<Address> address = teacher.getAddress();
         teacher.setAddress(address);
         Teacher saveResponse = teacherDOA.save(teacher);
         String message = String.format("A new teacher have been created with an id %s", saveResponse.getTeacherID());

@@ -12,10 +12,8 @@ public interface AdminDOA extends CrudRepository<Admin, Long> {
     @NonNull
      Admin save(Admin admin);
     Optional<Admin> getAdminByAdminID(Long id);
-
     @NonNull
     List<Admin> findAll();
-
     @Override
     @NonNull
     void delete(Admin entity);
