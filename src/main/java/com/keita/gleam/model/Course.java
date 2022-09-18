@@ -21,7 +21,7 @@ public class Course extends Courses{
             joinColumns = @JoinColumn(name = "courseID"),
             inverseJoinColumns = @JoinColumn(name = "teacherID")
     )
-//    @JsonBackReference(value = "course")
+    @JsonBackReference(value = "tCourses")
     private Set<Teacher> teachers;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
@@ -38,6 +38,13 @@ public class Course extends Courses{
     }
     private void newStudent(Student student) {
         students.add(student);
+    }
+
+    public void addTeacher(Teacher teacher) {
+        addNewTeacher(teacher);
+    }
+    private void addNewTeacher(Teacher teacher) {
+        teachers.add(teacher);
     }
 
 }

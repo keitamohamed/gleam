@@ -33,6 +33,11 @@ public class TeacherController {
         return teacherDOAImp.save(teacher, bindingResult);
     }
 
+    @PutMapping(value = {"/add_course/{id}/{cid}"})
+    public ResponseEntity<?> addCourse(@PathVariable Long id, @PathVariable Long cid, HttpServletResponse response) {
+        return teacherDOAImp.addCourse(id, cid, response);
+    }
+
     @PutMapping(value = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(@RequestBody Teacher teacher, @PathVariable Long id) {
         return teacherDOAImp.update(id, teacher);

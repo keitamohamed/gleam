@@ -4,11 +4,8 @@ import com.keita.gleam.doa.TeacherDOA;
 import com.keita.gleam.mapper.InvalidInput;
 import com.keita.gleam.mapper.Message;
 import com.keita.gleam.mapper.ResponseMessage;
-import com.keita.gleam.model.Address;
-import com.keita.gleam.model.Authenticate;
-import com.keita.gleam.model.Teacher;
+import com.keita.gleam.model.*;
 import com.keita.gleam.util.Util;
-import com.keita.gleam.validate.NotEmptyAddressFields;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +21,12 @@ import java.util.Set;
 public class TeacherDOAImp {
 
     private final TeacherDOA teacherDOA;
+    private final CourseDOAImp courseDOAImp;
 
     @Autowired
-    public TeacherDOAImp(TeacherDOA teacherDOA) {
+    public TeacherDOAImp(TeacherDOA teacherDOA, CourseDOAImp courseDOAImp) {
         this.teacherDOA = teacherDOA;
+        this.courseDOAImp = courseDOAImp;
     }
 
     public ResponseEntity<?> save(Teacher teacher, BindingResult bindingResult) {
@@ -49,6 +48,25 @@ public class TeacherDOAImp {
         Teacher saveResponse = teacherDOA.save(teacher);
         String message = String.format("A new teacher have been created with an id %s", saveResponse.getTeacherID());
         ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> addCourse(Long id, Long courseID, HttpServletResponse response) {
+        Optional<Teacher> findTeacher = findById(id);
+        Course courses = courseDOAImp.findCourseByID(courseID, response);
+        ResponseMessage responseMessage;
+        if (findTeacher.isEmpty()) {
+            String message = String.format("No Teacher found with an id %s", courseID);
+            responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
+            return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+        }
+        findTeacher.ifPresent(teacher -> teacher.addCourse(courses));
+        courses.addTeacher(findTeacher.get());
+        Teacher saveResponse = teacherDOA.save(findTeacher.get());
+
+        courseDOAImp.update(courses);
+        String message = String.format("%s have been add in %s class", saveResponse.getName(), courses.getCourseName());
+        responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
@@ -108,5 +126,9 @@ public class TeacherDOAImp {
 
     private Teacher findByID(Long id) {
         return teacherDOA.getTeacherByTeacherID(id);
+    }
+
+    private Optional<Teacher> findById(Long id) {
+        return teacherDOA.findById(id);
     }
 }

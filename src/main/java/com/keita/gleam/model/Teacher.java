@@ -49,5 +49,12 @@ public class Teacher {
     private Set<@NotNull(message = "At least one valid address is required") @Valid Address> address;
 
     @ManyToMany(mappedBy = "teachers", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Course> courses;
+    private Set<Course> tCourses;
+
+    public void addCourse(Course course) {
+        addNewCourse(course);
+    }
+    private void addNewCourse(Course course) {
+        tCourses.add(course);
+    }
 }

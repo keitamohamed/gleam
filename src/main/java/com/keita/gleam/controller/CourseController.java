@@ -15,7 +15,6 @@ import java.util.List;
 public class CourseController {
 
     private final CourseDOAImp courseDOAImp;
-
     public CourseController(CourseDOAImp courseDOAImp) {
         this.courseDOAImp = courseDOAImp;
     }
@@ -33,5 +32,10 @@ public class CourseController {
     @GetMapping(path = {"/all"})
     public List<Course> findCourseByID(HttpServletResponse response) {
         return courseDOAImp.courseList(response);
+    }
+
+    @DeleteMapping(value = {"/delete/{id}"})
+    public ResponseEntity<?> deleteCourse(@PathVariable Long id) {
+        return courseDOAImp.deleteCourse(id);
     }
 }

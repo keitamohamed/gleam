@@ -60,9 +60,9 @@ public class StudentDOAImp {
         }
         findStudent.ifPresent(student -> student.addNewCourse(courses));
         courses.AddNewStudent(findStudent.get());
+        Student saveResponse = studentDOA.save(findStudent.get());
 
         courseDOAImp.update(courses);
-        Student saveResponse = studentDOA.save(findStudent.get());
         String message = String.format("%s have been add in %s class", saveResponse.getName(), courses.getCourseName());
         responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);

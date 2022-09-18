@@ -31,8 +31,8 @@ public class Courses {
     @NotBlank(message = "Course description is required")
     private String description;
     @Positive(message = "Course credit must be a positive number")
-    @Min(value = 3, message = "Course credit must 3 credit and over")
-    @Max(value = 4, message = "Course credit must be 3 to 4 credit")
+    @Min(value = 1, message = "Course credit must 1 credit and over")
+    @Max(value = 5, message = "Course credit must be 1 to 5 credit")
     private int credit;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
