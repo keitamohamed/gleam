@@ -48,7 +48,6 @@ public class StudentDOAImp {
         ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
-
     public ResponseEntity<?> addCourse(Long id, Long courseID, HttpServletResponse response) {
         Optional<Student> findStudent = findByID(id);
         Course courses = courseDOAImp.findCourseByID(courseID, response);
