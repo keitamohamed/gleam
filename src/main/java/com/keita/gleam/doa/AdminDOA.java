@@ -1,7 +1,9 @@
 package com.keita.gleam.doa;
 
 import com.keita.gleam.model.Admin;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 
 import java.util.List;

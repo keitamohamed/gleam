@@ -30,8 +30,17 @@ public class CourseDOAImp {
     }
 
     public ResponseEntity<?> update(Admin admin, Course courses, BindingResult bindingResult){
+        String message;
+
         if (bindingResult.hasErrors()) {
             return InvalidInput.error(bindingResult, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        boolean courseExist = courseDOA.existsByCourseName(courses.getCourseName());
+        if (courseExist) {
+            message = String.format("%s course already exist", courses.getCourseName());
+            ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.FOUND.name(), HttpStatus.FOUND.value());
+            return new ResponseEntity<>(responseMessage, HttpStatus.FOUND);
         }
 
         long courseID = Long.parseLong(Util.generateSixDigit());
@@ -44,7 +53,7 @@ public class CourseDOAImp {
         courses.setCourseID(courseID);
         courses.setAdmin(admin);
         Courses saveResponse = courseDOA.save(courses);
-        String message = String.format("A new course have been created with an id %s", saveResponse.getCourseID());
+        message = String.format("A new course have been created with an id %s", saveResponse.getCourseID());
         ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }

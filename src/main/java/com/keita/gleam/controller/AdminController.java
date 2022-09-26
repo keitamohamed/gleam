@@ -2,8 +2,10 @@ package com.keita.gleam.controller;
 
 import com.keita.gleam.mapper.ResponseMessage;
 import com.keita.gleam.model.Admin;
+import com.keita.gleam.model.Authenticate;
 import com.keita.gleam.model.Course;
 import com.keita.gleam.service.AdminDOAImp;
+import com.keita.gleam.service.AuthenticateDOAImp;
 import com.keita.gleam.service.CourseDOAImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -23,11 +25,13 @@ public class AdminController {
 
     private final AdminDOAImp adminDOAImp;
     private final CourseDOAImp courseDOAImp;
+    private final AuthenticateDOAImp authenticateDOAImp;
 
     @Autowired
-    public AdminController(AdminDOAImp adminDOAImp, CourseDOAImp courseDOAImp) {
+    public AdminController(AdminDOAImp adminDOAImp, CourseDOAImp courseDOAImp, AuthenticateDOAImp authenticateDOAImp) {
         this.adminDOAImp = adminDOAImp;
         this.courseDOAImp = courseDOAImp;
+        this.authenticateDOAImp = authenticateDOAImp;
     }
 
     @PostMapping(value = {"/save"},
@@ -61,14 +65,23 @@ public class AdminController {
     public ResponseEntity<ResponseMessage> updateAdmin(@RequestBody Admin admin, @PathVariable Long id) {
         return adminDOAImp.update(id, admin);
     }
+
+    @PutMapping(value = {"/update_password/{id}"},
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updatePassword(@RequestBody Authenticate authenticate, @PathVariable Long id){
+        return authenticateDOAImp.updatePassword(id, authenticate);
+    }
+
     @GetMapping(value = {"/find_by_id/{id}"})
     public Optional<Admin> findByID(@PathVariable Long id, HttpServletResponse response) {
         return adminDOAImp.findByID(id, response);
     }
+
     @DeleteMapping(value = {"/delete_admin/{id}"})
     public ResponseEntity<?> deleteAdmin(@PathVariable Long id) {
         return adminDOAImp.deleteAdmin(id);
     }
+
     @GetMapping("/all")
     public List<Admin> adminList(HttpServletResponse response) {
         return adminDOAImp.adminList(response);

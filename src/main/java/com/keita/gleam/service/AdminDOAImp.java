@@ -1,7 +1,6 @@
 package com.keita.gleam.service;
 
 import com.keita.gleam.doa.AdminDOA;
-import com.keita.gleam.doa.CourseDOA;
 import com.keita.gleam.mapper.InvalidInput;
 import com.keita.gleam.mapper.Message;
 import com.keita.gleam.mapper.ResponseMessage;
@@ -21,15 +20,28 @@ import java.util.Optional;
 @Service
 public class AdminDOAImp {
     private final AdminDOA adminDOA;
+    private final AuthenticateDOAImp authenticateService;
 
     @Autowired
-    public AdminDOAImp(AdminDOA adminDOA) {
+    public AdminDOAImp(AdminDOA adminDOA, AuthenticateDOAImp authenticateService) {
         this.adminDOA = adminDOA;
+        this.authenticateService = authenticateService;
     }
 
     public ResponseEntity<?> save(Admin admin, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return InvalidInput.error(bindingResult, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        String message;
+        ResponseMessage responseMessage;
+
+        Authenticate authenticate = admin.getAuth();
+        boolean emailExist = authenticateService.emailExist(authenticate.getEmail());
+        if (emailExist) {
+            message = String.format("Email address { %s } already exist.", authenticate.getEmail());
+            responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
+            return new ResponseEntity<>(responseMessage, HttpStatus.FOUND);
         }
 
         long id = Long.parseLong(Util.generateSixDigit());
@@ -39,11 +51,11 @@ public class AdminDOAImp {
             findByID = findAdminByID(id);
         }
         admin.setAdminID(id);
-        Authenticate authenticate = admin.getAuth();
+        authenticate = admin.getAuth();
         authenticate.setAdmin(admin);
         Admin saveResponse = adminDOA.save(admin);
-        String message = String.format("A new admin have been created with an id %s", saveResponse.getAdminID());
-        ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
+        message = String.format("A new admin have been created with an id %s", saveResponse.getAdminID());
+        responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
