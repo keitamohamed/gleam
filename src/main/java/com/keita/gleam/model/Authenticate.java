@@ -27,6 +27,7 @@ public class Authenticate {
     @Column(updatable = false, unique = true)
     private String email;
     @NotBlank(message = "Enter a valid password")
+    @Lob
     private String password;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)

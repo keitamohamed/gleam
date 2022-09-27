@@ -4,9 +4,11 @@ import com.keita.gleam.mapper.ResponseMessage;
 import com.keita.gleam.model.Admin;
 import com.keita.gleam.model.Authenticate;
 import com.keita.gleam.model.Course;
+import com.keita.gleam.model.Major;
 import com.keita.gleam.service.AdminDOAImp;
 import com.keita.gleam.service.AuthenticateDOAImp;
 import com.keita.gleam.service.CourseDOAImp;
+import com.keita.gleam.service.MajorDOAImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +28,15 @@ public class AdminController {
     private final AdminDOAImp adminDOAImp;
     private final CourseDOAImp courseDOAImp;
     private final AuthenticateDOAImp authenticateDOAImp;
+    private final MajorDOAImp majorDOAImp;
 
     @Autowired
-    public AdminController(AdminDOAImp adminDOAImp, CourseDOAImp courseDOAImp, AuthenticateDOAImp authenticateDOAImp) {
+    public AdminController(AdminDOAImp adminDOAImp, CourseDOAImp courseDOAImp,
+                           AuthenticateDOAImp authenticateDOAImp, MajorDOAImp majorDOAImp) {
         this.adminDOAImp = adminDOAImp;
         this.courseDOAImp = courseDOAImp;
         this.authenticateDOAImp = authenticateDOAImp;
+        this.majorDOAImp = majorDOAImp;
     }
 
     @PostMapping(value = {"/save"},
@@ -42,6 +47,16 @@ public class AdminController {
             Admin admin,
             BindingResult bindingResult ) {
         return adminDOAImp.save(admin, bindingResult);
+    }
+
+    @PostMapping(value = {"/add/new_major"},
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addNewMajor(
+            @Valid
+            @RequestBody
+            Major major,
+            BindingResult bindingResult) {
+        return majorDOAImp.save(major, bindingResult);
     }
 
     @PostMapping(value = {"/save_course/{id}"},
@@ -85,5 +100,10 @@ public class AdminController {
     @GetMapping("/all")
     public List<Admin> adminList(HttpServletResponse response) {
         return adminDOAImp.adminList(response);
+    }
+
+    @GetMapping(value = {"/major/lists"})
+    public List<Major> majorList(HttpServletResponse response) {
+        return majorDOAImp.majorList(response);
     }
 }

@@ -14,4 +14,9 @@ public class Util {
         int num = random.nextInt(999999);
         return String.format("%06d", num);
     }
+    public static String generateSevenDigit() {
+        Random random = new Random();
+        int num = random.nextInt(9999999);
+        return String.format("%07d", num);
+    }
 }

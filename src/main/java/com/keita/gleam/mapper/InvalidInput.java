@@ -21,11 +21,13 @@ public class InvalidInput {
         message.put("code", String.valueOf(status.value()));
         int count = 0;
         int index = 0;
+        boolean addressErrors = false;
         for (FieldError error : bindingResult.getFieldErrors()) {
             if (error.getField().contains("address")) {
                 String replace = error.getField().trim().replace("address["+ index + "].", "");
                 addressError.put(replace, error.getDefaultMessage());
                 count += 1;
+                addressErrors = true;
             } else {
                 errorMap.put(error.getField(), error.getDefaultMessage());
                 System.out.println(error.getField() + " Message: " + error.getDefaultMessage());
@@ -35,24 +37,25 @@ public class InvalidInput {
                 index++;
             }
         }
-//        if (!NotEmptyAddressFields.isAddressValid(addresses)) {
-//            for (Address address : addresses) {
-//                if (address.getStreet().trim().isEmpty()) {
-//                    addressError.put("street", "Enter valid street address");
-//                }
-//                if (address.getCity().trim().isEmpty()) {
-//                    addressError.put("city", "Enter valid city name");
-//                }
-//                if (address.getState().trim().isEmpty()) {
-//                    addressError.put("state", "Enter valid state name");
-//                }
-//                if (address.getZip() == 0 || String.valueOf(address.getZip()).length() != 5) {
-//                    addressError.put("zipCode", "Zip code must be 5 digit number");
-//                }
-//            }
-//            errorMap.put("address", addressError);
-//        }
-        errorMap.put("address", addressError);
+        if (addressErrors) {
+            errorMap.put("address", addressError);
+        }
+        message.put("error", errorMap);
+        return new ResponseEntity<>(message, status);
+    }
+
+    public static ResponseEntity<Object> errors (BindingResult bindingResult, HttpStatus status) {
+        Map<String, Object> message = new HashMap<>();
+        Map<String, Object> errorMap = new HashMap<>();
+
+        message.put("status", status.name());
+        message.put("code", String.valueOf(status.value()));
+
+        for (FieldError error : bindingResult.getFieldErrors()) {
+            System.out.println("Error " + error.getField() + ": " + error.getDefaultMessage());
+            errorMap.put(error.getField(), error.getDefaultMessage());
+        }
+
         message.put("error", errorMap);
         return new ResponseEntity<>(message, status);
     }
