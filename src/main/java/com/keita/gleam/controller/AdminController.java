@@ -28,15 +28,13 @@ public class AdminController {
     private final AdminDOAImp adminDOAImp;
     private final CourseDOAImp courseDOAImp;
     private final AuthenticateDOAImp authenticateDOAImp;
-    private final MajorDOAImp majorDOAImp;
 
     @Autowired
     public AdminController(AdminDOAImp adminDOAImp, CourseDOAImp courseDOAImp,
-                           AuthenticateDOAImp authenticateDOAImp, MajorDOAImp majorDOAImp) {
+                           AuthenticateDOAImp authenticateDOAImp) {
         this.adminDOAImp = adminDOAImp;
         this.courseDOAImp = courseDOAImp;
         this.authenticateDOAImp = authenticateDOAImp;
-        this.majorDOAImp = majorDOAImp;
     }
 
     @PostMapping(value = {"/save"},
@@ -47,16 +45,6 @@ public class AdminController {
             Admin admin,
             BindingResult bindingResult ) {
         return adminDOAImp.save(admin, bindingResult);
-    }
-
-    @PostMapping(value = {"/add/new_major"},
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addNewMajor(
-            @Valid
-            @RequestBody
-            Major major,
-            BindingResult bindingResult) {
-        return majorDOAImp.save(major, bindingResult);
     }
 
     @PostMapping(value = {"/save_course/{id}"},
@@ -102,8 +90,4 @@ public class AdminController {
         return adminDOAImp.adminList(response);
     }
 
-    @GetMapping(value = {"/major/lists"})
-    public List<Major> majorList(HttpServletResponse response) {
-        return majorDOAImp.majorList(response);
-    }
 }

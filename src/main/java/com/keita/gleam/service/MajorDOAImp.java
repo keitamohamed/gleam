@@ -3,7 +3,6 @@ package com.keita.gleam.service;
 import com.keita.gleam.doa.MajorDOA;
 import com.keita.gleam.mapper.InvalidInput;
 import com.keita.gleam.mapper.Message;
-import com.keita.gleam.model.Admin;
 import com.keita.gleam.model.Major;
 import com.keita.gleam.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MajorDOAImp {
@@ -49,10 +49,34 @@ public class MajorDOAImp {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
+    public Optional<Major> findByID(Long id, HttpServletResponse response) {
+        Optional<Major> findMajor = majorDOA.findById(id);
+        if (findMajor.isEmpty()) {
+            String message = String.format("Could not find major with an id %s", id);
+            Message.noFoundException(message, HttpStatus.OK, response);
+        }
+        return findMajor;
+    }
+
+    public ResponseEntity<?> update(Long id, Major major) {
+
+        Optional<Major> findMajor = majorDOA.findById(id);
+        findMajor.ifPresent(m -> m.setDescription(major.getDescription()));
+
+        String message;
+        if (findMajor.isPresent()) {
+            majorDOA.save(findMajor.get());
+            message = String.format("%s description have been updated successfully", findMajor.get().getName());
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+        message = String.format("No major found for id %s", id);
+        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+    }
+
     public List<Major> majorList(HttpServletResponse response) {
         List<Major> majorList = majorDOA.findAll();
         if (majorList.size() == 0) {
-            Message.noFoundException("Admin list is empty. Add new admin", HttpStatus.OK, response);
+            Message.noFoundException("Major list is empty. Add new admin", HttpStatus.OK, response);
         }
         return majorList;
     }
