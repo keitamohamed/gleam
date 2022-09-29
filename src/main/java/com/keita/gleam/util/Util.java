@@ -19,4 +19,9 @@ public class Util {
         int num = random.nextInt(9999999);
         return String.format("%07d", num);
     }
+    public static String generateFourDigit() {
+        Random random = new Random();
+        int num = random.nextInt(9999);
+        return String.format("%04d", num);
+    }
 }

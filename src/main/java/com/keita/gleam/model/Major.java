@@ -21,13 +21,19 @@ public class Major {
 
     @Id
     private Long majorID;
+    @Column(unique = true, updatable = false)
     @NotBlank(message = "Enter a valid major name")
     private String name;
+
     @NotBlank(message = "Enter a valid major description")
     @Size(min = 100, message = "Description must be at least 100 world")
     @Lob
     private String description;
-    @OneToMany(mappedBy = "major", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "major")
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "major_subject",
+            joinColumns = @JoinColumn(name = "major_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id")
+    )
     private Set<Subject> subjects;
 }
