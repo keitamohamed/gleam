@@ -4,6 +4,7 @@ import com.keita.gleam.doa.MajorDOA;
 import com.keita.gleam.mapper.InvalidInput;
 import com.keita.gleam.mapper.Message;
 import com.keita.gleam.mapper.MessageMapper;
+import com.keita.gleam.mapper.ResponseMessage;
 import com.keita.gleam.model.Major;
 import com.keita.gleam.model.Subject;
 import com.keita.gleam.util.Util;
@@ -48,7 +49,8 @@ public class MajorDOAImp {
         major.setMajorID(id);
         Major saveResponse = majorDOA.save(major);
         message = String.format("Major %s have been save successfully", saveResponse.getName());
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        ResponseMessage mapper = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
+        return new ResponseEntity<>(mapper, HttpStatus.OK);
     }
 
     public Optional<Major> findByID(Long id, HttpServletResponse response) {

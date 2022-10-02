@@ -39,7 +39,8 @@ public class SubjectDOAImp {
         subject.setSubjectID(id);
         Subject saveResponse = subjectDOA.save(subject);
         String message = String.format("%s subject have been added", saveResponse.getName());
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
     public Optional<Subject> findByID(Long id) {

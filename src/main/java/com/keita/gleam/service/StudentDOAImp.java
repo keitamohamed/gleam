@@ -62,7 +62,7 @@ public class StudentDOAImp {
         Student saveResponse = studentDOA.save(findStudent.get());
 
         courseDOAImp.update(courses);
-        String message = String.format("%s have been add in %s class", saveResponse.getName(), courses.getCourseName());
+        String message = String.format("%s have been add in %s class", saveResponse.getName(), courses.getName());
         responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }

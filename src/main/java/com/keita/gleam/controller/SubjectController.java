@@ -33,7 +33,7 @@ public class SubjectController {
     public ResponseEntity<?> save(@Valid @RequestBody Subject subject, BindingResult bindingResult) {
         return subjectDOAImp.save(subject, bindingResult);
     }
-    @PutMapping(path = {"/subject_set_major/{id}/{mID}"})
+    @PutMapping(path = {"/update/{id}/{mID}"})
     public ResponseEntity<?> setMajor(@PathVariable Long id, @PathVariable Long mID, HttpServletResponse response) {
         Optional<Subject> subject = subjectDOAImp.findByID(id);
         Major major = majorDOAImp.setSubject(mID, subject.get(), response);

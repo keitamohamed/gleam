@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 public class Assignment {
 
     @Id
-    private Long id;
+    private Long aid;
     @NotBlank(message = "Enter a valid assignment name")
     private String name;
     @NotBlank(message = "Enter a valid description")
@@ -28,7 +28,7 @@ public class Assignment {
     private int point;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "courseID")
+    @JoinColumn(name = "id")
     @JsonBackReference(value = "assignment")
     private Courses assignment;
 

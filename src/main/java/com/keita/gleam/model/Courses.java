@@ -26,9 +26,11 @@ import java.util.List;
 public class Courses implements Serializable {
 
     @Id
-    private Long courseID;
+    private Long id;
     @NotBlank(message = "Course name is required")
-    private String courseName;
+    private String name;
+    @Lob
+    @Column(columnDefinition = "TEXT")
     @NotBlank(message = "Course description is required")
     private String description;
     @Positive(message = "Course credit must be a positive number")

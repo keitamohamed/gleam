@@ -33,16 +33,16 @@ public class CourseDOAImp {
             return InvalidInput.error(bindingResult, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        boolean courseExist = courseDOA.existsByCourseName(courses.getCourseName());
+        boolean courseExist = courseDOA.existsByName(courses.getName());
         if (courseExist) {
-            message = String.format("%s course already exist", courses.getCourseName());
+            message = String.format("%s course already exist", courses.getName());
             ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.FOUND.name(), HttpStatus.FOUND.value());
             return new ResponseEntity<>(responseMessage, HttpStatus.FOUND);
         }
 
         if (subject.isEmpty()) {
             ResponseMessage responseMessage = new ResponseMessage(
-                    String.format("Could not add %s course", courses.getCourseName()), HttpStatus.OK.name(), HttpStatus.OK.value());
+                    String.format("Could not add %s course", courses.getName()), HttpStatus.OK.name(), HttpStatus.OK.value());
             return new ResponseEntity<>(responseMessage, HttpStatus.OK);
         }
 
@@ -53,10 +53,10 @@ public class CourseDOAImp {
             findCourse = findByID(courseID);
         }
 
-        courses.setCourseID(courseID);
+        courses.setId(courseID);
         courses.setSubject(subject.get());
         Courses saveResponse = courseDOA.save(courses);
-        message = String.format("A new course have been created with an id %s", saveResponse.getCourseID());
+        message = String.format("A new course have been created, %s", saveResponse.getName());
         ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
@@ -74,12 +74,12 @@ public class CourseDOAImp {
             return new ResponseEntity<>(responseMessage, HttpStatus.OK);
         }
         findCourse.ifPresent(c -> {
-            c.setCourseName(courses.getCourseName());
+            c.setName(courses.getName());
             c.setDescription(courses.getDescription());
             c.setCredit(courses.getCredit());
         });
         Course updateResult = courseDOA.save(findCourse.get());
-        String message = String.format("%s [id: %s] course information have been updated successfully", updateResult.getCourseName(), updateResult.getCourseID());
+        String message = String.format("%s course information have been updated successfully", updateResult.getName());
         ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
@@ -94,7 +94,7 @@ public class CourseDOAImp {
     }
 
     public List<Course> courseList(HttpServletResponse response) {
-        List<Course> findAll = courseDOA.findAll();
+        List<Course> findAll = courseDOA.getCourses();
         if (findAll.isEmpty()) {
             Message.noFoundException("There are no courses. Add new course", HttpStatus.OK, response);
         }
@@ -109,12 +109,12 @@ public class CourseDOAImp {
             return Message.setMessage(message, HttpStatus.OK);
         }
 
-        message = String.format("Successfully deleted %s course", courses.get().getCourseName());
+        message = String.format("Successfully deleted %s course", courses.get().getName());
         courseDOA.delete(courses.get());
         return Message.setMessage(message, HttpStatus.OK);
     }
 
     private Optional<Course> findByID(Long id) {
-        return courseDOA.findByCourseID(id);
+        return courseDOA.findById(id);
     }
 }

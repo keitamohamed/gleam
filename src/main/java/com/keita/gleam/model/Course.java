@@ -18,7 +18,7 @@ public class Course extends Courses{
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "class",
-            joinColumns = @JoinColumn(name = "courseID"),
+            joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "teacherID")
     )
     @JsonBackReference(value = "tCourses")
@@ -27,7 +27,7 @@ public class Course extends Courses{
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "course",
-            joinColumns = @JoinColumn(name = "courseID"),
+            joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "studentID")
     )
     @JsonBackReference(value = "courses")
