@@ -48,8 +48,4 @@ public class Admin {
     @JsonManagedReference(value = "admin")
     private Authenticate auth;
 
-    @OneToMany(mappedBy = "admin", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JsonManagedReference(value = "admin")
-    private Set<Courses> courses;
 }

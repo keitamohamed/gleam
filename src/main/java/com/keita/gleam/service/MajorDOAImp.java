@@ -3,7 +3,9 @@ package com.keita.gleam.service;
 import com.keita.gleam.doa.MajorDOA;
 import com.keita.gleam.mapper.InvalidInput;
 import com.keita.gleam.mapper.Message;
+import com.keita.gleam.mapper.MessageMapper;
 import com.keita.gleam.model.Major;
+import com.keita.gleam.model.Subject;
 import com.keita.gleam.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -73,10 +75,20 @@ public class MajorDOAImp {
         return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
     }
 
+    public Major setSubject(Long id, Subject subject, HttpServletResponse response) {
+        Optional<Major> find = findByID(id, response);
+        if (find.isEmpty()) {
+            Message.noFoundException(String.format("No major find with an id %s", id), HttpStatus.OK, response);
+        }
+        Major major = find.get();
+        major.addNewSubject(subject);
+        return (majorDOA.save(major));
+    }
+
     public List<Major> majorList(HttpServletResponse response) {
         List<Major> majorList = majorDOA.findAll();
         if (majorList.size() == 0) {
-            Message.noFoundException("Major list is empty. Add new admin", HttpStatus.OK, response);
+            Message.noFoundException("Major list is empty. Add new major", HttpStatus.OK, response);
         }
         return majorList;
     }

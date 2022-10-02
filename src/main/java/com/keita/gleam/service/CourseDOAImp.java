@@ -4,10 +4,7 @@ import com.keita.gleam.doa.CourseDOA;
 import com.keita.gleam.mapper.InvalidInput;
 import com.keita.gleam.mapper.Message;
 import com.keita.gleam.mapper.ResponseMessage;
-import com.keita.gleam.model.Admin;
-import com.keita.gleam.model.Course;
-import com.keita.gleam.model.Courses;
-import com.keita.gleam.model.Student;
+import com.keita.gleam.model.*;
 import com.keita.gleam.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +26,7 @@ public class CourseDOAImp {
         this.courseDOA = courseDOA;
     }
 
-    public ResponseEntity<?> update(Admin admin, Course courses, BindingResult bindingResult){
+    public ResponseEntity<?> save(Course courses, Optional<Subject> subject, BindingResult bindingResult){
         String message;
 
         if (bindingResult.hasErrors()) {
@@ -43,6 +40,12 @@ public class CourseDOAImp {
             return new ResponseEntity<>(responseMessage, HttpStatus.FOUND);
         }
 
+        if (subject.isEmpty()) {
+            ResponseMessage responseMessage = new ResponseMessage(
+                    String.format("Could not add %s course", courses.getCourseName()), HttpStatus.OK.name(), HttpStatus.OK.value());
+            return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+        }
+
         long courseID = Long.parseLong(Util.generateSixDigit());
         Optional<Course> findCourse = findByID(courseID);
         while (findCourse.isPresent()) {
@@ -51,7 +54,7 @@ public class CourseDOAImp {
         }
 
         courses.setCourseID(courseID);
-        courses.setAdmin(admin);
+        courses.setSubject(subject.get());
         Courses saveResponse = courseDOA.save(courses);
         message = String.format("A new course have been created with an id %s", saveResponse.getCourseID());
         ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
@@ -105,8 +108,9 @@ public class CourseDOAImp {
             message = String.format("No Course exist with an id %s", id);
             return Message.setMessage(message, HttpStatus.OK);
         }
-//        courseDOA.delete(courses.get());
-        message = String.format("Successfully deleted course with an id %s", id);
+
+        message = String.format("Successfully deleted %s course", courses.get().getCourseName());
+        courseDOA.delete(courses.get());
         return Message.setMessage(message, HttpStatus.OK);
     }
 

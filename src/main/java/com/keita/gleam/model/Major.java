@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
@@ -17,7 +17,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Major {
+public class Major implements Serializable {
 
     @Id
     private Long majorID;
@@ -35,5 +35,12 @@ public class Major {
             joinColumns = @JoinColumn(name = "major_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
+//    @JsonManagedReference(value = "major")
     private Set<Subject> subjects;
+    public boolean addNewSubject(Subject subject) {
+        return addSubject(subject);
+    }
+    private boolean addSubject(Subject subject) {
+        return subjects.add(subject);
+    }
 }

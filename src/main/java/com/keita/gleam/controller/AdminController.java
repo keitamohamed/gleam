@@ -26,14 +26,12 @@ import java.util.Optional;
 public class AdminController {
 
     private final AdminDOAImp adminDOAImp;
-    private final CourseDOAImp courseDOAImp;
     private final AuthenticateDOAImp authenticateDOAImp;
 
     @Autowired
-    public AdminController(AdminDOAImp adminDOAImp, CourseDOAImp courseDOAImp,
+    public AdminController(AdminDOAImp adminDOAImp,
                            AuthenticateDOAImp authenticateDOAImp) {
         this.adminDOAImp = adminDOAImp;
-        this.courseDOAImp = courseDOAImp;
         this.authenticateDOAImp = authenticateDOAImp;
     }
 
@@ -45,20 +43,6 @@ public class AdminController {
             Admin admin,
             BindingResult bindingResult ) {
         return adminDOAImp.save(admin, bindingResult);
-    }
-
-    @PostMapping(value = {"/save_course/{id}"},
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveCourse(
-            @Valid
-            @RequestBody
-            Course courses,
-            BindingResult bindingResult,
-            @PathVariable Long id,
-            HttpServletResponse response) {
-        Optional<Admin> findAdmin = adminDOAImp.findByID(id, response);
-        Admin admin = findAdmin.get();
-        return courseDOAImp.update(admin, courses, bindingResult);
     }
 
     @PutMapping(

@@ -15,6 +15,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -22,7 +23,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Courses {
+public class Courses implements Serializable {
 
     @Id
     private Long courseID;
@@ -36,9 +37,9 @@ public class Courses {
     private int credit;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "adminID")
-    @JsonBackReference(value = "admin")
-    private Admin admin;
+    @JoinColumn(name = "subjectID")
+    @JsonBackReference(value = "subject")
+    private Subject subject;
 
     @OneToMany(mappedBy = "assignment", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
