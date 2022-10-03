@@ -112,6 +112,21 @@ public class StudentDOAImp {
         return findAll;
     }
 
+    public ResponseEntity<?> removeMajor(Long id, Long mID) {
+        Optional<Student> findStudent = findByID(id);
+        if (findStudent.isEmpty()) {
+            String message = String.format("No student exist with an id %s", id);
+            ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND.value());
+            return new ResponseEntity<>(responseMessage, HttpStatus.NOT_FOUND);
+        }
+        Major findMajor = findStudent.get().findMajor(mID);
+        findStudent.get().removeMajor(mID);
+        Student saveResponse = studentDOA.save(findStudent.get());
+        String message = String.format("%s major have been removed from %s major list", findMajor.getName(), saveResponse.getName());
+        ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }
+
     public ResponseEntity<?> deleteStudentByID(Long id) {
         Optional<Student> findStudent = findByID(id);
         if (findStudent.isEmpty()) {
@@ -121,7 +136,8 @@ public class StudentDOAImp {
         }
         studentDOA.delete(findStudent.get());
         String message = String.format("Successfully deleted student with an id %s", id);
-        return Message.setMessage(message, HttpStatus.OK);
+        ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
     public Student findStudentByID(Long id, HttpServletResponse response) {

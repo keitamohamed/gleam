@@ -73,4 +73,12 @@ public class Student {
     public boolean removeMajor(Long id) {
         return (this.majors.removeIf(m -> Objects.equals(m.getMajorID(), id)));
     }
+
+    public Major findMajor (Long id) {
+        return this.majors
+                .stream()
+                .filter(major -> major.getMajorID().equals(id))
+                .findAny()
+                .orElse(null);
+    }
 }

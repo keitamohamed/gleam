@@ -65,6 +65,11 @@ public class StudentController {
         return studentDOAImp.update(id, student);
     }
 
+    @PutMapping(path = {"/remove_major/{id}/{mID}"})
+    public ResponseEntity<?> removeMajor(@PathVariable Long id, @PathVariable Long mID) {
+        return studentDOAImp.removeMajor(id, mID);
+    }
+
     @DeleteMapping(path = {"/delete_by_id/{id}"})
     public ResponseEntity<?> deleteStudentByID(@PathVariable Long id) {
         return studentDOAImp.deleteStudentByID(id);
