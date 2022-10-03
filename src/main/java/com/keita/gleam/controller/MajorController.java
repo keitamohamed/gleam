@@ -50,4 +50,10 @@ public class MajorController {
         return majorDOAImp.majorList(response);
     }
 
+    @DeleteMapping(path = {"/delete/{id}"})
+    public ResponseEntity<?> deleteMajor(@PathVariable Long id) {
+        boolean isAllSubjectDeleted = majorDOAImp.removeAllSubject(id);
+        return majorDOAImp.deleteMajor(id, isAllSubjectDeleted);
+    }
+
 }

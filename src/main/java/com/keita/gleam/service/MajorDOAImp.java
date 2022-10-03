@@ -95,5 +95,31 @@ public class MajorDOAImp {
         return majorList;
     }
 
+    public boolean removeAllSubject(Long id) {
+        Optional<Major> majors = majorDOA.findById(id);
+        if (majors.isEmpty()) {
+            return false;
+        }
+        Major major = majors.get();
+        major.removeAllSubject(major.getSubjects());
+        majorDOA.save(major);
+        return true;
+    }
+
+    public ResponseEntity<?> deleteMajor(Long id, boolean isSubjectsDeleted) {
+        Optional<Major> findMajor = majorDOA.findById(id);
+        String message;
+        if (findMajor.isEmpty() || !isSubjectsDeleted) {
+            message = String.format("Could not delete major's with an id %s", id);
+            ResponseMessage responseMessage = new ResponseMessage(message,
+                    HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND.value());
+            return new ResponseEntity<>(responseMessage, HttpStatus.NOT_FOUND);
+        }
+        message = String.format("%s major have been deleted", findMajor.get().getName());
+        majorDOA.delete(findMajor.get());
+        ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }
+
 
 }

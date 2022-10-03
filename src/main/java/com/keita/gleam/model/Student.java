@@ -16,6 +16,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -47,6 +48,13 @@ public class Student {
     @JsonManagedReference(value = "student")
     private Set<@NotNull(message = "At least one valid address is required") @Valid Address> address;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "study",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "major_id")
+    )
+    private Set<Major> majors;
+
     @ManyToMany(mappedBy = "students", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Course> courses;
 
@@ -56,5 +64,13 @@ public class Student {
 
     private void addCourse(Course newCourse) {
         courses.add(newCourse);
+    }
+
+    public boolean addMajor(Major major) {
+        return (this.majors.add(major));
+    }
+
+    public boolean removeMajor(Long id) {
+        return (this.majors.removeIf(m -> Objects.equals(m.getMajorID(), id)));
     }
 }

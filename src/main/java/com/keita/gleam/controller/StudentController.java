@@ -1,8 +1,8 @@
 package com.keita.gleam.controller;
 
-import com.keita.gleam.model.Courses;
+import com.keita.gleam.model.Major;
 import com.keita.gleam.model.Student;
-import com.keita.gleam.service.CourseDOAImp;
+import com.keita.gleam.service.MajorDOAImp;
 import com.keita.gleam.service.StudentDOAImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -20,10 +21,12 @@ import java.util.List;
 public class StudentController {
 
     private final StudentDOAImp studentDOAImp;
+    private final MajorDOAImp majorDOAImp;
 
     @Autowired
-    public StudentController(StudentDOAImp studentDOAImp) {
+    public StudentController(StudentDOAImp studentDOAImp, MajorDOAImp majorDOAImp) {
         this.studentDOAImp = studentDOAImp;
+        this.majorDOAImp = majorDOAImp;
     }
 
     @PostMapping(value = {"/save"}, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -34,6 +37,12 @@ public class StudentController {
             BindingResult bindingResult
             ) {
         return studentDOAImp.save(student, bindingResult);
+    }
+
+    @PutMapping(path = {"/enroll_in_major/{id}/{mID}"})
+    public ResponseEntity<?> addMajor(@PathVariable Long id, @PathVariable Long mID, HttpServletResponse response) {
+        Optional<Major> major = majorDOAImp.findByID(mID, response);
+        return studentDOAImp.addMajor(id, major);
     }
 
     @PutMapping(value = {"/add_course/{id}/{cid}"})

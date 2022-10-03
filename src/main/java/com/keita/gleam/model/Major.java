@@ -1,5 +1,6 @@
 package com.keita.gleam.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,17 +30,24 @@ public class Major implements Serializable {
     @Lob
     private String description;
 
+    @ManyToMany(mappedBy = "majors", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonBackReference(value = "students")
+    private Set<Student> students;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "major_subject",
             joinColumns = @JoinColumn(name = "major_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
-//    @JsonManagedReference(value = "major")
     private Set<Subject> subjects;
     public boolean addNewSubject(Subject subject) {
         return addSubject(subject);
     }
     private boolean addSubject(Subject subject) {
         return subjects.add(subject);
+    }
+
+    public boolean removeAllSubject(Set<Subject> subjects) {
+        return (this.getSubjects().removeAll(subjects));
     }
 }

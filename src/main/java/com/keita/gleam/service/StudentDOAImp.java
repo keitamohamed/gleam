@@ -6,6 +6,7 @@ import com.keita.gleam.mapper.Message;
 import com.keita.gleam.mapper.ResponseMessage;
 import com.keita.gleam.model.Authenticate;
 import com.keita.gleam.model.Course;
+import com.keita.gleam.model.Major;
 import com.keita.gleam.model.Student;
 import com.keita.gleam.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,21 @@ public class StudentDOAImp {
         ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
+
+    public ResponseEntity<?> addMajor(Long id, Optional<Major> major) {
+        Optional<Student> findStudent = findByID(id);
+        if (findStudent.isEmpty() || major.isEmpty()) {
+            String message = String.format("No student exist with an id %s", id);
+            ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND.value());
+            return new ResponseEntity<>(responseMessage, HttpStatus.NOT_FOUND);
+        }
+        findStudent.get().addMajor(major.get());
+        Student saveResponse = studentDOA.save(findStudent.get());
+        String message = String.format("%s have been enroll in %s", saveResponse.getName(), major.get().getName());
+        ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }
+
     public ResponseEntity<?> addCourse(Long id, Long courseID, HttpServletResponse response) {
         Optional<Student> findStudent = findByID(id);
         Course courses = courseDOAImp.findCourseByID(courseID, response);
@@ -89,7 +105,7 @@ public class StudentDOAImp {
     }
 
     public List<Student> findAllStudent(HttpServletResponse response) {
-        List<Student> findAll = studentDOA.findAll();
+        List<Student> findAll = studentDOA.getAllStudents();
         if (findAll.isEmpty()) {
             Message.noFoundException("Student list is empty. Add new teacher", HttpStatus.OK, response);
         }

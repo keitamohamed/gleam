@@ -1,7 +1,6 @@
 package com.keita.gleam.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,7 +39,11 @@ public class Subject implements Serializable {
         add(major);
     }
 
-    private boolean add(Major m) {
-        return major.add(m);
+    private void add(Major m) {
+        major.add(m);
+    }
+
+    public boolean removeMajors(Set<Major> major) {
+        return (this.major.removeAll(major));
     }
 }

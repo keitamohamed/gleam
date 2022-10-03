@@ -33,7 +33,13 @@ public class SubjectController {
     public ResponseEntity<?> save(@Valid @RequestBody Subject subject, BindingResult bindingResult) {
         return subjectDOAImp.save(subject, bindingResult);
     }
-    @PutMapping(path = {"/update/{id}/{mID}"})
+
+    @PutMapping(path = {"/update/{id}"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> update(@RequestBody Subject subject, @PathVariable Long id) {
+        return subjectDOAImp.update(id, subject);
+    }
+
+    @PutMapping(path = {"/update/{id}/{mID}"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> setMajor(@PathVariable Long id, @PathVariable Long mID, HttpServletResponse response) {
         Optional<Subject> subject = subjectDOAImp.findByID(id);
         Major major = majorDOAImp.setSubject(mID, subject.get(), response);
@@ -43,5 +49,10 @@ public class SubjectController {
     @GetMapping(path = {"/lists"})
     public List<Subject> subjectList(HttpServletResponse response) {
         return subjectDOAImp.subjectList(response);
+    }
+
+    @DeleteMapping(path = "/delete/{id}")
+    public ResponseEntity<?> deleteSubject(@PathVariable Long id) {
+        return subjectDOAImp.deleteSubject(id);
     }
 }
