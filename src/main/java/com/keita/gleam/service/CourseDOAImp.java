@@ -13,13 +13,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseDOAImp {
 
     private final CourseDOA courseDOA;
+    private List<Course> courseList = new ArrayList<>();
 
     @Autowired
     public CourseDOAImp(CourseDOA courseDOA) {
@@ -66,6 +70,15 @@ public class CourseDOAImp {
         courseDOA.save(courses);
     }
 
+    public Course isSave(Long id, Optional<Teacher> teacher) {
+        Optional<Course> findCourse = findByID(id);
+        if (teacher.isEmpty() || findCourse.isEmpty()) {
+            return null;
+        }
+        findCourse.get().addTeacher(teacher.get());
+        return (courseDOA.save(findCourse.get()));
+    }
+
     public ResponseEntity<?> updateCourse(Long id, Course courses) {
         Optional<Course> findCourse = findByID(id);
 
@@ -99,7 +112,22 @@ public class CourseDOAImp {
         if (findAll.isEmpty()) {
             Message.noFoundException("There are no courses. Add new course", HttpStatus.OK, response);
         }
-        return findAll;
+        return filter(findAll);
+    }
+
+    private List<Course> filter (List<Course> courses) {
+        List<Course> filterC = new ArrayList<>();
+        for (Course c : courses) {
+            for (Teacher t : c.getTeachers()) {
+                t.getCourses().removeAll(t.getCourses());
+                t.getAddress().removeAll(t.getAddress());
+                t.setAuth(null);
+                t.setPhone(null);
+                t.setDob(null);
+            }
+            filterC.add(c);
+        }
+        return filterC;
     }
 
     public ResponseEntity<?> deleteCourse(Long id) {
@@ -115,7 +143,7 @@ public class CourseDOAImp {
         return Message.setMessage(message, HttpStatus.OK);
     }
 
-    private Optional<Course> findByID(Long id) {
+    public Optional<Course> findByID(Long id) {
         return courseDOA.findById(id);
     }
 }

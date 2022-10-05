@@ -1,6 +1,8 @@
 package com.keita.gleam.controller;
 
+import com.keita.gleam.model.Course;
 import com.keita.gleam.model.Teacher;
+import com.keita.gleam.service.CourseDOAImp;
 import com.keita.gleam.service.TeacherDOAImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -18,10 +21,12 @@ import java.util.List;
 public class TeacherController {
 
     private final TeacherDOAImp teacherDOAImp;
+    private final CourseDOAImp courseDOAImp;
 
     @Autowired
-    public TeacherController(TeacherDOAImp teacherDOAImp) {
+    public TeacherController(TeacherDOAImp teacherDOAImp, CourseDOAImp courseDOAImp) {
         this.teacherDOAImp = teacherDOAImp;
+        this.courseDOAImp = courseDOAImp;
     }
 
     @PostMapping(value = {"/save"}, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -34,8 +39,9 @@ public class TeacherController {
     }
 
     @PutMapping(value = {"/add_course/{id}/{cid}"})
-    public ResponseEntity<?> addCourse(@PathVariable Long id, @PathVariable Long cid, HttpServletResponse response) {
-        return teacherDOAImp.addCourse(id, cid, response);
+    public ResponseEntity<?> addCourse(@PathVariable Long id, @PathVariable Long cid) {
+        Course course = courseDOAImp.isSave(cid, teacherDOAImp.findById(id));
+        return teacherDOAImp.updateSetCourse(id, cid, course);
     }
 
     @PutMapping(value = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)

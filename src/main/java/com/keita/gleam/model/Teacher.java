@@ -1,9 +1,7 @@
 package com.keita.gleam.model;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,15 +9,15 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "teacherID"
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -48,13 +46,13 @@ public class Teacher {
     @JsonManagedReference(value = "teacher")
     private Set<@NotNull(message = "At least one valid address is required") @Valid Address> address;
 
-    @ManyToMany(mappedBy = "teachers", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Course> tCourses;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Course> courses;
 
     public void addCourse(Course course) {
         addNewCourse(course);
     }
     private void addNewCourse(Course course) {
-        tCourses.add(course);
+        courses.add(course);
     }
 }

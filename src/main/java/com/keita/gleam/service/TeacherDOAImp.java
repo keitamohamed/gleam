@@ -51,6 +51,28 @@ public class TeacherDOAImp {
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
+    public ResponseEntity<?> updateSetCourse(Long id, Long courseID, Course course) {
+        Optional<Teacher> findTeacher = findById(id);
+        if (course == null) {
+            String message = String.format("No course exist with an id %s", courseID);
+            ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND.value());
+            return new ResponseEntity<>(responseMessage, HttpStatus.NOT_FOUND);
+        }
+        if (findTeacher.isEmpty()) {
+            String message = String.format("No teacher exist with an id %s", id);
+            ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND.value());
+            return new ResponseEntity<>(responseMessage, HttpStatus.NOT_FOUND);
+        }
+        findTeacher.get().addCourse(course);
+        Teacher saveResponse = teacherDOA.save(findTeacher.get());
+        String message = String.format(
+                "%s course have been added to %s course list",
+                course.getName(),
+                saveResponse.getName());
+        ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }
+
     public ResponseEntity<?> addCourse(Long id, Long courseID, HttpServletResponse response) {
         Optional<Teacher> findTeacher = findById(id);
         Course courses = courseDOAImp.findCourseByID(courseID, response);
@@ -93,7 +115,7 @@ public class TeacherDOAImp {
     }
 
     public List<Teacher> teacherList(HttpServletResponse response) {
-        List<Teacher> findAll = teacherDOA.findAll();
+        List<Teacher> findAll = teacherDOA.findAllTeacher();
         if (findAll.isEmpty()) {
             Message.noFoundException("Teacher list is empty. Add new teacher", HttpStatus.OK, response);
         }
@@ -128,7 +150,7 @@ public class TeacherDOAImp {
         return teacherDOA.getTeacherByTeacherID(id);
     }
 
-    private Optional<Teacher> findById(Long id) {
+    public Optional<Teacher> findById(Long id) {
         return teacherDOA.findById(id);
     }
 }
