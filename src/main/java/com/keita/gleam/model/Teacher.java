@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -54,5 +55,21 @@ public class Teacher {
     }
     private void addNewCourse(Course course) {
         courses.add(course);
+    }
+
+    public boolean removeCourse(Long courseID) {
+        return remove(courseID);
+    }
+
+    private boolean remove(Long courseID) {
+        return this.courses.removeIf(course -> Objects.equals(course.getId(), courseID));
+    }
+
+    public Course findCourse(Long id) {
+        return this.courses
+                .stream()
+                .filter(course -> Objects.equals(course.getId(), id))
+                .findAny()
+                .orElse(null);
     }
 }

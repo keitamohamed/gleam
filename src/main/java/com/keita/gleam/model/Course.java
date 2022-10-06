@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -43,6 +44,14 @@ public class Course extends Courses {
     }
     private void addNewTeacher(Teacher teacher) {
         teachers.add(teacher);
+    }
+
+    public boolean removeTeacher(Long id) {
+        return remove(id);
+    }
+
+    private boolean remove(Long id) {
+        return this.teachers.removeIf(teacher -> Objects.equals(teacher.getTeacherID(), id));
     }
 
 }

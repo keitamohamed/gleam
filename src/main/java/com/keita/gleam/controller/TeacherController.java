@@ -64,4 +64,9 @@ public class TeacherController {
         return teacherDOAImp.deleteTeacher(id);
     }
 
+    @PutMapping(path = {"/remove_course/{id}/{cid}"})
+    public ResponseEntity<?> removeCourse(@PathVariable Long id, @PathVariable Long cid) {
+        return teacherDOAImp.updateRemoveCourse(id, cid);
+    }
+
 }

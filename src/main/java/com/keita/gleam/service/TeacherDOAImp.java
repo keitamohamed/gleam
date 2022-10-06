@@ -73,21 +73,20 @@ public class TeacherDOAImp {
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
-    public ResponseEntity<?> addCourse(Long id, Long courseID, HttpServletResponse response) {
+    public ResponseEntity<?> updateRemoveCourse(Long id, Long courseID) {
         Optional<Teacher> findTeacher = findById(id);
-        Course courses = courseDOAImp.findCourseByID(courseID, response);
         ResponseMessage responseMessage;
         if (findTeacher.isEmpty()) {
             String message = String.format("No Teacher found with an id %s", courseID);
             responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
             return new ResponseEntity<>(responseMessage, HttpStatus.OK);
         }
-        findTeacher.ifPresent(teacher -> teacher.addCourse(courses));
-        courses.addTeacher(findTeacher.get());
+        Course course = findTeacher.get().findCourse(courseID);
+        findTeacher.get().removeCourse(courseID);
+        course.removeTeacher(id);
+        courseDOAImp.update(course);
         Teacher saveResponse = teacherDOA.save(findTeacher.get());
-
-        courseDOAImp.update(courses);
-        String message = String.format("%s have been add in %s class", saveResponse.getName(), courses.getName());
+        String message = String.format("%s course have been removed from %s course list", course.getName(), saveResponse.getName());
         responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
