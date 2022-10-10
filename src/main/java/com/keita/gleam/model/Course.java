@@ -51,7 +51,11 @@ public class Course extends Courses {
     }
 
     private boolean remove(Long id) {
-        return this.teachers.removeIf(teacher -> Objects.equals(teacher.getTeacherID(), id));
+        return this.teachers.removeIf(teacher -> Objects.equals(teacher.getId(), id));
+    }
+
+    public boolean removeTeacher(Teacher teacher) {
+        return (this.teachers.removeIf(t -> Objects.equals(t.getId(), teacher.getId())));
     }
 
 }

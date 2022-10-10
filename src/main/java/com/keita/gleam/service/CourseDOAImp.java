@@ -4,7 +4,10 @@ import com.keita.gleam.doa.CourseDOA;
 import com.keita.gleam.mapper.InvalidInput;
 import com.keita.gleam.mapper.Message;
 import com.keita.gleam.mapper.ResponseMessage;
-import com.keita.gleam.model.*;
+import com.keita.gleam.model.Course;
+import com.keita.gleam.model.Courses;
+import com.keita.gleam.model.Subject;
+import com.keita.gleam.model.Teacher;
 import com.keita.gleam.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,13 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class CourseDOAImp {
 
     private final CourseDOA courseDOA;
-    private List<Course> courseList = new ArrayList<>();
 
     @Autowired
     public CourseDOAImp(CourseDOA courseDOA) {
@@ -98,11 +99,19 @@ public class CourseDOAImp {
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
+    public void removeTeacher(Teacher teacher) {
+        Set<Course> courses = teacher.getCourses();
+        courses.forEach(c -> {
+            c.removeTeacher(teacher);
+        });
+    }
+
     public Course findCourseByID(Long id, HttpServletResponse response) {
         Optional<Course> findCourse = findByID(id);
         if (findCourse.isEmpty()) {
             String message = String.format("No course found with an id %s", id);
             Message.noFoundException(message, HttpStatus.OK, response);
+            return null;
         }
        return findCourse.get();
     }

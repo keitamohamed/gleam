@@ -16,18 +16,18 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "teacherID"
-)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties(value = {"teacherID"}, allowGetters = true)
+//@JsonIgnoreProperties(value = {"id"}, allowGetters = true)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class Teacher {
 
     @Id
-    private Long teacherID;
+    private Long id;
     @NotBlank(message = "Enter a valid name")
     private String name;
     @NotNull(message = "Enter a valid date of birth")
@@ -63,6 +63,10 @@ public class Teacher {
 
     private boolean remove(Long courseID) {
         return this.courses.removeIf(course -> Objects.equals(course.getId(), courseID));
+    }
+
+    public boolean removeAllCourse() {
+        return (this.courses.removeAll(this.getCourses()));
     }
 
     public Course findCourse(Long id) {

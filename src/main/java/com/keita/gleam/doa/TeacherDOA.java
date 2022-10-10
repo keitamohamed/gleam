@@ -18,7 +18,7 @@ public interface TeacherDOA extends CrudRepository<Teacher, Long> {
 
     @Override
     Optional<Teacher> findById(Long aLong);
-    Teacher getTeacherByTeacherID(Long id);
+    Teacher getTeacherById(Long id);
 
     @Transactional
     @Query(value = "SELECT * FROM Teacher ", nativeQuery = true)

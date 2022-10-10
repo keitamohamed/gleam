@@ -40,13 +40,13 @@ public class TeacherDOAImp {
             id = Long.parseLong(Util.generateSixDigit());
             findTeacher = teacherDOA.findById(id);
         }
-        teacher.setTeacherID(id);
+        teacher.setId(id);
         Authenticate authenticate = teacher.getAuth();
         authenticate.setTeacher(teacher);
         Set<Address> address = teacher.getAddress();
         teacher.setAddress(address);
         Teacher saveResponse = teacherDOA.save(teacher);
-        String message = String.format("A new teacher have been created with an id %s", saveResponse.getTeacherID());
+        String message = String.format("A new teacher have been created with an id %s", saveResponse.getId());
         ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
@@ -59,7 +59,7 @@ public class TeacherDOAImp {
             return new ResponseEntity<>(responseMessage, HttpStatus.NOT_FOUND);
         }
         if (findTeacher.isEmpty()) {
-            String message = String.format("No teacher exist with an id %s", id);
+            String message = message(id);
             ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND.value());
             return new ResponseEntity<>(responseMessage, HttpStatus.NOT_FOUND);
         }
@@ -77,7 +77,7 @@ public class TeacherDOAImp {
         Optional<Teacher> findTeacher = findById(id);
         ResponseMessage responseMessage;
         if (findTeacher.isEmpty()) {
-            String message = String.format("No Teacher found with an id %s", courseID);
+            String message = message(id);
             responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
             return new ResponseEntity<>(responseMessage, HttpStatus.OK);
         }
@@ -91,12 +91,28 @@ public class TeacherDOAImp {
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
+    public ResponseEntity<?> removeAllCourse(Long id) {
+        Optional<Teacher> findTeacher = findById(id);
+        if (findTeacher.isEmpty()) {
+            ResponseMessage responseMessage = new ResponseMessage(message(id), HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND.value());
+            return new ResponseEntity<>(responseMessage, HttpStatus.NOT_FOUND);
+        }
+        courseDOAImp.removeTeacher(findTeacher.get());
+        findTeacher.get().removeAllCourse();
+        Teacher saveResponse = teacherDOA.save(findTeacher.get());
+        ResponseMessage responseMessage = new ResponseMessage(
+                String.format("All %s course have been deleted", saveResponse.getName()),
+                HttpStatus.OK.name(),
+                HttpStatus.OK.value()) ;
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }
+
     public ResponseEntity<?> update(Long id, Teacher teacher) {
         Optional<Teacher> findTeacher = teacherDOA.findById(id);
         String message;
 
         if (findTeacher.isEmpty()) {
-            message = String.format("There are no student with an id %s", id);
+            message = message(id);
             ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
             return new ResponseEntity<>(responseMessage, HttpStatus.OK);
         }
@@ -108,7 +124,7 @@ public class TeacherDOAImp {
             teacher1.setPhone(teacher.getPhone());
         });
         Teacher updateResult = teacherDOA.save(findTeacher.get());
-        message = String.format("Information was successfully updated for teacher with an id %s", updateResult.getTeacherID());
+        message = String.format("Information was successfully updated for teacher with an id %s", updateResult.getId());
         ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
@@ -127,7 +143,7 @@ public class TeacherDOAImp {
         String message;
 
         if (findTeacher.isEmpty()) {
-            message = String.format("No teacher find to delete with an id %s", id);
+            message = message(id);
             ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND.value());
             return new ResponseEntity<>(responseMessage, HttpStatus.OK);
         }
@@ -139,17 +155,21 @@ public class TeacherDOAImp {
     public Teacher findAdminByID(Long id, HttpServletResponse response) {
         Teacher findTeacher = findByID(id);
         if (findTeacher == null) {
-            String message = String.format("Could not find teacher with an id %s", id);
+            String message = message(id);
             Message.noFoundException(message, HttpStatus.OK, response);
         }
         return findTeacher;
     }
 
     private Teacher findByID(Long id) {
-        return teacherDOA.getTeacherByTeacherID(id);
+        return teacherDOA.getTeacherById(id);
     }
 
     public Optional<Teacher> findById(Long id) {
         return teacherDOA.findById(id);
+    }
+
+    private String message(long id) {
+        return String.format("No teacher exist with an id %s", id);
     }
 }

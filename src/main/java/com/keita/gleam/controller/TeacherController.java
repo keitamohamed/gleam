@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -67,6 +66,11 @@ public class TeacherController {
     @PutMapping(path = {"/remove_course/{id}/{cid}"})
     public ResponseEntity<?> removeCourse(@PathVariable Long id, @PathVariable Long cid) {
         return teacherDOAImp.updateRemoveCourse(id, cid);
+    }
+
+    @PutMapping(path = {"/remove_courses/{id}"})
+    public ResponseEntity<?> removeAllCourse(@PathVariable Long id) {
+        return teacherDOAImp.removeAllCourse(id);
     }
 
 }

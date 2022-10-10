@@ -35,7 +35,7 @@ public class Address {
     private Admin admin;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "teacherID")
+    @JoinColumn(name = "id")
     @JsonBackReference(value = "teacher")
     private Teacher teacher;
 

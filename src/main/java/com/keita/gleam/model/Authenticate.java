@@ -36,7 +36,7 @@ public class Authenticate {
     private Admin admin;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "teacherID")
+    @JoinColumn(name = "id")
     @JsonBackReference(value = "teacher")
     private Teacher teacher;
 
