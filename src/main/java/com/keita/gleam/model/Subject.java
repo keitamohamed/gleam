@@ -10,6 +10,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -45,5 +46,9 @@ public class Subject implements Serializable {
 
     public boolean removeMajors(Set<Major> major) {
         return (this.major.removeAll(major));
+    }
+
+    public boolean removeCourse(Long id) {
+        return (this.courses.removeIf(c -> Objects.equals(c.getId(), id)));
     }
 }

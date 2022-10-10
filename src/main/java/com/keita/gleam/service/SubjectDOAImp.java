@@ -4,6 +4,7 @@ import com.keita.gleam.doa.SubjectDOA;
 import com.keita.gleam.mapper.InvalidInput;
 import com.keita.gleam.mapper.Message;
 import com.keita.gleam.mapper.ResponseMessage;
+import com.keita.gleam.model.Course;
 import com.keita.gleam.model.Major;
 import com.keita.gleam.model.Subject;
 import com.keita.gleam.util.Util;
@@ -102,6 +103,11 @@ public class SubjectDOAImp {
         findSubject.get().removeMajors(majors);
         subjectDOA.save(findSubject.get());
         return true;
+    }
+
+    public void removeCourse(Long id, Subject subject) {
+        subject.removeCourse(id);
+        subjectDOA.save(subject);
     }
 
     public List<Subject> subjectList(HttpServletResponse response) {

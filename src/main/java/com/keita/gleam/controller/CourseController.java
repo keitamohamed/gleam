@@ -1,9 +1,11 @@
 package com.keita.gleam.controller;
 
+import com.keita.gleam.mapper.ResponseMessage;
 import com.keita.gleam.model.Course;
 import com.keita.gleam.model.Subject;
 import com.keita.gleam.service.CourseDOAImp;
 import com.keita.gleam.service.SubjectDOAImp;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -56,6 +58,15 @@ public class CourseController {
 
     @DeleteMapping(value = {"/delete/{id}"})
     public ResponseEntity<?> deleteCourse(@PathVariable Long id) {
+        Optional<Course> findCourse = courseDOAImp.findByID(id);
+        if (findCourse.isEmpty()) {
+            ResponseMessage message = new ResponseMessage(
+                    String.format("No course exist with an id %s", id),
+                    HttpStatus.NOT_FOUND.name(),
+                    HttpStatus.NOT_FOUND.value());
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        }
+        subjectDOAImp.removeCourse(id, findCourse.get().getSubject());
         return courseDOAImp.deleteCourse(id);
     }
 }

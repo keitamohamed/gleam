@@ -146,7 +146,7 @@ public class CourseDOAImp {
             message = String.format("No Course exist with an id %s", id);
             return Message.setMessage(message, HttpStatus.OK);
         }
-
+        
         message = String.format("Successfully deleted %s course", courses.get().getName());
         courseDOA.delete(courses.get());
         return Message.setMessage(message, HttpStatus.OK);
