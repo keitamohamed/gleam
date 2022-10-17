@@ -11,6 +11,7 @@ export const useTeacher = () => {
 
     const setSelectedTeacher = (teacher: any) => {
         dispatch(teacherAction.loadTeacher(teacher))
+        dispatch(teacherAction.setAuth(teacher))
         dispatch(teacherAction.setAddresses(teacher))
     }
 

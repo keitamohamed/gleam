@@ -10,9 +10,6 @@ svg {
   }
 
   .round_image {
-    //width: 60px;
-    //height: 60px;
-
     img {
       width: 60px;
       height: 60px;
@@ -197,5 +194,69 @@ svg {
         background: none !important
       }
     }
+  }
+
+  .accordion-content {
+
+    .tab-section {
+      display: none;
+    }
+
+    .activate_section {
+      display: flex;
+    }
+
+    section {
+      width: 100%;
+      padding: 10px;
+
+      .address {
+        padding: 10px;
+        border-bottom: 1px solid #B2B2B2;
+
+        * {
+          text-align: left;
+        }
+
+        span {
+          font-size: .8em;
+          padding-right: 1em;
+        }
+
+        .address_container {
+
+          li {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 1em;
+
+            p {
+              text-transform: uppercase;
+              font-size: 14px;
+            }
+          }
+        }
+
+        .edit_container {
+          border-bottom: 1px dotted #B2B2B2;
+          width: 100%;
+          display: inline-flex;
+          gap: 1em;
+          justify-content: flex-end;
+          place-items: flex-end;
+
+          li {
+            svg {
+              color: #4C6793;
+            }
+            &:last-child > svg {
+              color: #FF1E1E
+            }
+          }
+        }
+      }
+    }
+
+
   }
 }

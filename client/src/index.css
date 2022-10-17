@@ -160,6 +160,50 @@ svg {
 .accordion .accordion-tabs li:hover {
   background: none !important;
 }
+.accordion .accordion-content .tab-section {
+  display: none;
+}
+.accordion .accordion-content .activate_section {
+  display: flex;
+}
+.accordion .accordion-content section {
+  width: 100%;
+  padding: 10px;
+}
+.accordion .accordion-content section .address {
+  padding: 10px;
+  border-bottom: 1px solid #B2B2B2;
+}
+.accordion .accordion-content section .address * {
+  text-align: left;
+}
+.accordion .accordion-content section .address span {
+  font-size: 0.8em;
+  padding-right: 1em;
+}
+.accordion .accordion-content section .address .address_container li {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1em;
+}
+.accordion .accordion-content section .address .address_container li p {
+  text-transform: uppercase;
+  font-size: 14px;
+}
+.accordion .accordion-content section .address .edit_container {
+  border-bottom: 1px dotted #B2B2B2;
+  width: 100%;
+  display: inline-flex;
+  gap: 1em;
+  justify-content: flex-end;
+  place-items: flex-end;
+}
+.accordion .accordion-content section .address .edit_container li svg {
+  color: #4C6793;
+}
+.accordion .accordion-content section .address .edit_container li:last-child > svg {
+  color: #FF1E1E;
+}
 
 html {
   -webkit-text-size-adjust: 100%;

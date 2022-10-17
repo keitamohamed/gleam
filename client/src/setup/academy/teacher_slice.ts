@@ -42,6 +42,9 @@ const teacherSlice = createSlice({
         loadTeachers: (state, action) => {
             state.teachers = action.payload
         },
+        setAuth: (state, action) => {
+            state.auth = action.payload[0].auth
+        },
         setAddresses: (state, action) => {
             state.address = action.payload[0].address
         },
