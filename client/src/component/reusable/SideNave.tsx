@@ -1,3 +1,4 @@
+import {useNavigate} from 'react-router-dom'
 import {RiDashboardFill} from "react-icons/ri";
 import {GoBook, GoCalendar} from "react-icons/go";
 import {BsPeopleFill} from "react-icons/bs";
@@ -8,6 +9,7 @@ import {useContext} from "react";
 import {DashboardContext} from "../../setup/context/Context";
 
 export const SideNave = () => {
+    const nav = useNavigate()
     const dash = useContext(DashboardContext)
 
     return (
@@ -15,7 +17,7 @@ export const SideNave = () => {
             <div className="list_container">
                 <li className={"round_image"}
                     onClick={
-                        () => dash.setActionType("account")}
+                        () => nav("/teacher/profile")}
                 >
                     <img
                         className={"md:w-48 rounded-full mx-auto"}

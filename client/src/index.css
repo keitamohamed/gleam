@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Hurricane&family=Lato:wght@300&family=Open+Sans:wght@300&family=Roboto:ital,wght@0,100;0,300;1,100&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Hurricane&family=Lato:wght@300&family=Open+Sans:wght@300&family=Roboto:ital,wght@0,100;0,300;1,100&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -73,6 +74,91 @@ svg {
 }
 .card .body .icons svg {
   font-size: 1em;
+}
+
+.profile .life_side {
+  padding: 10px;
+}
+.profile .life_side .information {
+  margin-top: 1.5em;
+  text-align: left;
+  font-size: 0.8em;
+}
+.profile .life_side .information .add_ {
+  color: #929AAB;
+  text-transform: uppercase;
+  font-size: 0.8em;
+}
+.profile .life_side .information .add_:after {
+  content: "________________________________";
+  display: inline-block;
+  width: 100px;
+  position: absolute;
+  padding-left: 5px;
+  text-transform: uppercase;
+}
+.profile .life_side .information .address {
+  padding-left: 1em;
+}
+.profile .life_side .information .address p {
+  display: list-item;
+  list-style-type: square;
+  tab-size: 2;
+}
+.profile .life_side section {
+  margin-top: 1.5em;
+}
+.profile .life_side section * {
+  text-align: left;
+}
+.profile .life_side section p {
+  margin-bottom: 0.3em;
+}
+.profile .life_side section p span {
+  padding-right: 1em;
+  font-size: 0.9em;
+  color: #929AAB;
+}
+.profile .main .section_top, .profile .main .accordion {
+  width: 100%;
+  height: 100%;
+}
+.profile .main .section_top {
+  text-align: left;
+}
+.profile .main .section_top .info_container {
+  padding: 15px 0;
+}
+.profile .main .section_top .info_container * {
+  text-align: left;
+}
+.profile .main .section_top .info_container h3 {
+  font-weight: bold;
+}
+.profile .main .section_top .info_container p {
+  font-size: 0.8em;
+}
+
+.accordion {
+  height: 100%;
+}
+.accordion li {
+  list-style: none;
+}
+.accordion .accordion-tabs {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.accordion .accordion-tabs li {
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid #B2B2B2;
+  cursor: pointer;
+}
+.accordion .accordion-tabs li:hover {
+  background: none !important;
 }
 
 html {

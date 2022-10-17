@@ -1,8 +1,45 @@
+svg {
+  cursor: pointer;
+}
+
+.side-nav * {
+  color: #fff;
+}
+.side-nav .round_image img {
+  width: 60px;
+  height: 60px;
+}
+.side-nav .list_container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  background: #3D3C42;
+  height: 100vh;
+}
+.side-nav .list_container li {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5px 0;
+  list-style: none;
+  place-items: center;
+}
+.side-nav .list_container li span {
+  font-size: 0.7em;
+}
+.side-nav .list_container li:hover {
+  background: white;
+}
+.side-nav .list_container li:hover * {
+  color: #000;
+}
+
 .card {
   display: flex;
   flex-direction: column;
   width: 200px;
-  border: 1px solid #c1c1c1;
+  height: 200px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0 2px 5px -1px, rgba(0, 0, 0, 0.3) 0 1px 3px -1px;
 }
 .card .header {
   width: 100%;
@@ -15,6 +52,11 @@
 .card .body .text_container * {
   text-align: left;
 }
+.card .body .text_container h2 {
+  padding-bottom: 5px;
+  color: #256D85;
+  font-weight: 900;
+}
 .card .body .text_container h5, .card .body .text_container p {
   font-size: 0.8em;
 }
@@ -23,6 +65,7 @@
   display: flex;
   gap: 1em;
   justify-content: space-evenly;
+  place-items: center;
 }
 .card .body .icons svg {
   font-size: 1em;

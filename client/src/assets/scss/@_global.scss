@@ -1,3 +1,4 @@
+@import "@_variable";
 
 svg {
   cursor: pointer;
@@ -88,6 +89,112 @@ svg {
 
       svg {
         font-size: 1em;
+      }
+    }
+  }
+}
+
+.profile {
+
+  .life_side {
+    padding: 10px;
+
+    .information {
+      margin-top: 1.5em;
+      text-align: left;
+      font-size: .8em;
+
+      .add_ {
+        color: $fade_white;
+        text-transform: uppercase;
+        font-size: .8em;
+
+        &:after {
+          content: "________________________________";
+          display: inline-block;
+          width: 100px;
+          position: absolute;
+          padding-left: 5px;
+          text-transform: uppercase;
+        }
+      }
+
+      .address {
+        padding-left: 1em;
+
+        p {
+          display: list-item;
+          list-style-type: square;
+          tab-size: 2;
+        }
+      }
+    }
+
+    section {
+      margin-top: 1.5em;
+      * {
+        text-align: left;
+      }
+
+      p {
+        margin-bottom: .3em;
+        span {
+          padding-right: 1em;
+          font-size: .9em;
+          color: $fade_white;
+        }
+      }
+    }
+  }
+
+  .main {
+
+    .section_top, .accordion {
+      width: 100%;
+      height: 100%;
+    }
+    .section_top {
+      text-align: left;
+
+      .info_container {
+        padding: 15px 0;
+
+        * {
+          text-align: left;
+        }
+
+        h3 {
+          font-weight: bold;
+        }
+
+        p {
+          font-size: .8em;
+        }
+      }
+    }
+  }
+}
+
+.accordion {
+  height: 100%;
+
+  li {
+    list-style: none
+  }
+  .accordion-tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    li {
+      width: 100%;
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid #B2B2B2;
+      cursor: pointer;
+
+      &:hover {
+        background: none !important
       }
     }
   }

@@ -37,10 +37,13 @@ const teacherSlice = createSlice({
             state.teacher[teacher.name as keyof Object] = teacher.value
         },
         loadTeacher: (state, action) => {
-           state.teacher = action.payload
+           state.teacher = action.payload[0]
         },
         loadTeachers: (state, action) => {
             state.teachers = action.payload
+        },
+        setAddresses: (state, action) => {
+            state.address = action.payload[0].address
         },
         initTeacher: (state, action) => {
             state.teacher = reSetTeacher

@@ -3,10 +3,12 @@ import {useContext} from "react";
 import {DashboardContext} from "../../setup/context/Context";
 
 import {Card} from "../reusable/course_card";
-import {Profile} from "../sup_page/teacher_profile";
+import {Teacher_Profile} from "../sup_page/teacher_profile";
+import {useTeacher} from "../../hook/useTeacher";
 
 export const Teacher = () => {
     const dash = useContext(DashboardContext)
+    const {} = useTeacher()
 
     return (
         <div className={"teacher_layout grid grid-cols-9 gap-2"}>
@@ -14,7 +16,7 @@ export const Teacher = () => {
             <div className="main grid grid-cols-3 col-span-6">
                 {
                     dash.getAction().displayName == 'account' ?
-                        <Profile />
+                        <Teacher_Profile />
                         :
                         dash.getAction().displayName == 'dashboard' ?
                             <Card/>
