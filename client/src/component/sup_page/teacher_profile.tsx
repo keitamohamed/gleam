@@ -1,13 +1,23 @@
 import {PatternFormat} from "react-number-format";
 import {AiOutlineEdit, AiOutlineClose} from 'react-icons/ai'
-import {useAppStore} from "../../setup/academy/useReduxHook";
+import {useAppDispatch, useAppStore} from "../../setup/academy/useReduxHook";
 import {accordion} from "../../util/accordion";
 
 import image from "/src/assets/image/photo.jpg"
-import {useEffect} from "react";
+import {useContext, useEffect} from "react";
+import {teacherAction} from "../../setup/academy/teacher_slice";
+import {DashboardContext} from "../../setup/context/Context";
 
 export const Teacher_Profile = () => {
-    const {teacher, address, auth} = useAppStore((state) => state.teacher)
+    const dashCtx = useContext(DashboardContext)
+    const dispatch = useAppDispatch()
+    const {teacher, addresses, auth} = useAppStore((state) => state.teacher)
+
+    const setSelectedAddress = (id: number, action: string) => {
+        const location = addresses.find(a => a.addressID == id);
+        dispatch(teacherAction.setSelectedAddress(location))
+        dashCtx.setActionType(action);
+    }
 
     useEffect(() => {
         accordion()
@@ -33,7 +43,7 @@ export const Teacher_Profile = () => {
                     <div className="information">
                         <span className={'add_'}>Addresses</span>
                         {
-                            address.map((a, index) => {
+                            addresses.map((a, index) => {
                                 return (
                                     <section className='address' key={`${a.state}_${index}`}>
                                         <p>
@@ -81,15 +91,22 @@ export const Teacher_Profile = () => {
                             <section className="tab-section" data-actab-id={"4"}>
                                <div className="container">
                                    {
-                                       address.map((a, index) => {
+                                       addresses.map((a, index) => {
                                            return (
-                                               <section className="address !w-4/6">
+                                               <section className="address !w-4/6" key={`${index}_${a.state}`}>
                                                    <div className="edit_container">
-                                                       <li><AiOutlineEdit/></li>
-                                                       <li><AiOutlineClose/></li>
+                                                       <li onClick={() => setSelectedAddress(a.addressID, 'editAddress')}>
+                                                           <AiOutlineEdit/>
+                                                       </li>
+                                                       <li onClick={() => setSelectedAddress(a.addressID, 'deleteAddress')}>
+                                                           <AiOutlineClose/>
+                                                       </li>
                                                    </div>
                                                    <div className="address_container">
-                                                       <section className='' key={`${a.state}_${index}`}>
+                                                       <section
+                                                           className=''
+                                                           key={`${a.state}_${index}`}
+                                                       >
                                                            <li><span>Street: </span><p>{a.street}</p></li>
                                                            <li><span>City: </span><p>{a.city}</p></li>
                                                            <li><span>State: </span><p>{a.state}</p></li>

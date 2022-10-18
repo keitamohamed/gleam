@@ -8,6 +8,7 @@ const dashboardProps: DashboardProperty = {
             show: false
         };
     },
+    setDisplayName(prop: string): void {},
     setActionProp(props: DashboardStateProps): void {},
     setActionType(action: string): void {}
 }

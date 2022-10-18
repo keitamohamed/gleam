@@ -13,7 +13,8 @@ export interface TeacherInitialState {
         email: string
         password: string
     }
-    address: any[],
+    addresses: any[],
+    address: {},
     message: any,
     error: any
 }

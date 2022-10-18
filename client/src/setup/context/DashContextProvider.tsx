@@ -8,6 +8,7 @@ const {Provider} = DashboardContext
 export const DashboardContextProvider = ({children}: Props) => {
     const [action, setAction] = useState<DashboardStateProps>({
         displayName: 'dashboard',
+        actionType: '',
         show: false
     })
 
@@ -18,17 +19,23 @@ export const DashboardContextProvider = ({children}: Props) => {
     const setActionProp = (props: DashboardStateProps) => {
 
     }
-    
-    const setActionType = (actionName: string) => {
+    const setDisplayName = (prop: string) => {
+      setAction({
+          ...action,
+          displayName: prop
+      })
+    }
+    const setActionType = (prop: string) => {
         setAction({
             ...action,
-            displayName: actionName,
+            actionType: prop,
         })
     }
 
     return (
         <Provider value={{
            getAction,
+            setDisplayName,
             setActionProp,
            setActionType
         }}>

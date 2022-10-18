@@ -10,7 +10,8 @@ const reSetTeacher: TeacherInitialState["teacher"] = {
 }
 
 const initialState: TeacherInitialState = {
-    address: [],
+    addresses: [],
+    address: {},
     auth: {
         authID: 0,
         email: "",
@@ -46,7 +47,10 @@ const teacherSlice = createSlice({
             state.auth = action.payload[0].auth
         },
         setAddresses: (state, action) => {
-            state.address = action.payload[0].address
+            state.addresses = action.payload[0].address
+        },
+        setSelectedAddress: (state, action) => {
+            state.address = action.payload
         },
         initTeacher: (state, action) => {
             state.teacher = reSetTeacher
