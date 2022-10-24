@@ -1,5 +1,6 @@
 package com.keita.gleam.controller;
 
+import com.keita.gleam.model.Address;
 import com.keita.gleam.model.Course;
 import com.keita.gleam.model.Teacher;
 import com.keita.gleam.service.CourseDOAImp;
@@ -37,6 +38,13 @@ public class TeacherController {
         return teacherDOAImp.save(teacher, bindingResult);
     }
 
+    @PostMapping(path = {"/add-address/{id}"})
+    public ResponseEntity<?> saveAddress(
+            @Valid
+            @RequestBody Address address, BindingResult bindingResult, @PathVariable Long id) {
+       return teacherDOAImp.saveAddress(id, address, bindingResult);
+    }
+
     @PutMapping(value = {"/add_course/{id}/{cid}"})
     public ResponseEntity<?> addCourse(@PathVariable Long id, @PathVariable Long cid) {
         Course course = courseDOAImp.isSave(cid, teacherDOAImp.findById(id));
@@ -46,6 +54,16 @@ public class TeacherController {
     @PutMapping(value = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(@RequestBody Teacher teacher, @PathVariable Long id) {
         return teacherDOAImp.update(id, teacher);
+    }
+
+    @PutMapping(path = {"/update-address"},
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateAddress(
+            @Valid
+            @RequestBody Address address,
+            BindingResult bindingResult,
+            HttpServletResponse response) {
+        return teacherDOAImp.updateAddress(address, bindingResult, response);
     }
 
     @GetMapping(value = {"/find_by_id/{id}"})

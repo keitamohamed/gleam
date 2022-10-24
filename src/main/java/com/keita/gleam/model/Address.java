@@ -26,6 +26,7 @@ public class Address {
     private String city;
     @NotBlank(message = "Enter a valid state")
     private String state;
+    @NotBlank(message = "Enter a validate zip code")
     @Size(min = 5, max = 5, message = "Zip code must be a five digit number")
     private String zip;
 
