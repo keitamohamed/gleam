@@ -30,7 +30,6 @@ public class InvalidInput {
                 addressErrors = true;
             } else {
                 errorMap.put(error.getField(), error.getDefaultMessage());
-                System.out.println(error.getField() + " Message: " + error.getDefaultMessage());
             }
             if (count == 4) {
                 count = 0;
@@ -43,6 +42,18 @@ public class InvalidInput {
         message.put("error", errorMap);
         return new ResponseEntity<>(message, status);
     }
+//    public static ResponseEntity<Object> errorAddress (BindingResult bindingResult, HttpStatus status) {
+//        Map<String, Object> message = new HashMap<>();
+//        Map<String, Object> errorMap = new HashMap<>();
+//
+//        message.put("status", status.name());
+//        message.put("code", String.valueOf(status.value()));
+//        for (FieldError error : bindingResult.getFieldErrors()) {
+//            errorMap.put(error.getField(), error.getDefaultMessage());
+//        }
+//        message.put("error", errorMap);
+//        return new ResponseEntity<>(message, status);
+//    }
 
     public static ResponseEntity<Object> errors (BindingResult bindingResult, HttpStatus status) {
         Map<String, Object> message = new HashMap<>();
@@ -52,7 +63,6 @@ public class InvalidInput {
         message.put("code", String.valueOf(status.value()));
 
         for (FieldError error : bindingResult.getFieldErrors()) {
-            System.out.println("Error " + error.getField() + ": " + error.getDefaultMessage());
             errorMap.put(error.getField(), error.getDefaultMessage());
         }
 

@@ -22,11 +22,13 @@ public class TeacherDOAImp {
 
     private final TeacherDOA teacherDOA;
     private final CourseDOAImp courseDOAImp;
+    private final AddressDOAImp addressDOAImp;
 
     @Autowired
-    public TeacherDOAImp(TeacherDOA teacherDOA, CourseDOAImp courseDOAImp) {
+    public TeacherDOAImp(TeacherDOA teacherDOA, CourseDOAImp courseDOAImp, AddressDOAImp addressDOAImp) {
         this.teacherDOA = teacherDOA;
         this.courseDOAImp = courseDOAImp;
+        this.addressDOAImp = addressDOAImp;
     }
 
     public ResponseEntity<?> save(Teacher teacher, BindingResult bindingResult) {
@@ -49,6 +51,36 @@ public class TeacherDOAImp {
         String message = String.format("A new teacher have been created with an id %s", saveResponse.getId());
         ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> saveAddress(Long id, Address address, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return InvalidInput.errors(bindingResult, HttpStatus.NOT_ACCEPTABLE);
+        }
+        Optional<Teacher> findTeacher = findById(id);
+        if (findTeacher.isEmpty()) {
+            String message = String.format("No teacher find with an id %s", id);
+            ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND.value());
+            return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+        }
+        String message = String.format("New address have been added for %s.", findTeacher.get().getName());
+        address.setTeacher(findTeacher.get());
+        return addressDOAImp.save(address, message);
+    }
+
+    public ResponseEntity<?> updateAddress(Address address, BindingResult bindingResult, HttpServletResponse response) {
+        if (bindingResult.hasErrors()) {
+            return InvalidInput.errors(bindingResult, HttpStatus.NOT_ACCEPTABLE);
+        }
+        Optional<Address> findAddress = addressDOAImp.findByID(address.getAddressID(), response);
+        findAddress.ifPresent(a -> {
+            a.setStreet(address.getStreet());
+            a.setCity(address.getCity());
+            a.setState(address.getState());
+            a.setZip(address.getZip());
+        });
+        String message = String.format("Address have been successfully updated, (ID: %s).", address.getAddressID());
+        return addressDOAImp.save(findAddress.get(), message);
     }
 
     public ResponseEntity<?> updateSetCourse(Long id, Long courseID, Course course) {
