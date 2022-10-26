@@ -65,6 +65,10 @@ public class Teacher {
         return this.courses.removeIf(course -> Objects.equals(course.getId(), courseID));
     }
 
+    public boolean removeAddress(Address address) {
+        return (this.address.removeIf(a -> Objects.equals(a.getAddressID(), address.getAddressID())));
+    }
+
     public boolean removeAllCourse() {
         return (this.courses.removeAll(this.getCourses()));
     }

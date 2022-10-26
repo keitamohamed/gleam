@@ -23,8 +23,7 @@ public class AddressDOAImp {
     public Optional<Address> findByID(Long id, HttpServletResponse response) {
         Optional<Address> findAddress = addressDOA.findAddressByAddressID(id);
         if (findAddress.isEmpty()) {
-            String message = message(id);
-            Message.noFoundException(message, HttpStatus.OK, response);
+            Message.noFoundException(message(id), HttpStatus.OK, response);
         }
         return findAddress;
     }
@@ -35,7 +34,19 @@ public class AddressDOAImp {
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
+    public ResponseEntity<?> deleteAddress(Address address) {
+        Address findAddress = addressDOA.findAddressByID(address.getAddressID());
+        if (findAddress == null) {
+            ResponseMessage responseMessage = new ResponseMessage(message(address.getAddressID()), HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND.value());
+            return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+        }
+        String message = String.format("Address with an id %s have been successfully deleted", address.getAddressID());
+        addressDOA.delete(findAddress);
+        ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }
+
     private String message(Long id) {
-        return String.format("No address exist with an id", id);
+        return String.format("No address exist with an id %s", id);
     }
 }
