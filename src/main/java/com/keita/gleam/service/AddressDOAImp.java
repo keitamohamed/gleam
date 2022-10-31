@@ -34,14 +34,13 @@ public class AddressDOAImp {
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
-    public ResponseEntity<?> deleteAddress(Address address) {
-        Address findAddress = addressDOA.findAddressByID(address.getAddressID());
-        if (findAddress == null) {
-            ResponseMessage responseMessage = new ResponseMessage(message(address.getAddressID()), HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND.value());
+    public ResponseEntity<?> deleteAddress(Long id, Address address) {
+        if (address == null) {
+            ResponseMessage responseMessage = new ResponseMessage(message(id), HttpStatus.NOT_FOUND.name(), HttpStatus.NOT_FOUND.value());
             return new ResponseEntity<>(responseMessage, HttpStatus.OK);
         }
         String message = String.format("Address with an id %s have been successfully deleted", address.getAddressID());
-        addressDOA.delete(findAddress);
+        addressDOA.deleteByAddressID(id);
         ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
