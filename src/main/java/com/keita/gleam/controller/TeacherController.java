@@ -81,9 +81,9 @@ public class TeacherController {
         return teacherDOAImp.deleteTeacher(id);
     }
 
-    @DeleteMapping(path = {"/delete-address/{id}"})
-    public ResponseEntity<?> deleteAddress(@RequestBody Address address, @PathVariable Long id) {
-        return teacherDOAImp.removeAddress(id, address);
+    @DeleteMapping(path = {"/delete-address/{id}/{aid}"})
+    public ResponseEntity<?> deleteAddress(@PathVariable Long id, @PathVariable Long aid) {
+        return teacherDOAImp.removeAddress(id, aid);
     }
 
     @PutMapping(path = {"/remove_course/{id}/{cid}"})

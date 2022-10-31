@@ -11,9 +11,8 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -65,8 +64,16 @@ public class Teacher {
         return this.courses.removeIf(course -> Objects.equals(course.getId(), courseID));
     }
 
-    public boolean removeAddress(Address address) {
-        return (this.address.removeIf(a -> Objects.equals(a.getAddressID(), address.getAddressID())));
+    public boolean removeAddress(Long id) {
+        return (this.address.removeIf(a -> Objects.equals(a.getAddressID(), id)));
+    }
+
+    public Address findAddress(Long id) {
+        return  address
+                .stream()
+                .filter(a -> Objects.equals(a.getAddressID(), id))
+                .findFirst()
+                .orElse(new Address());
     }
 
     public boolean removeAllCourse() {

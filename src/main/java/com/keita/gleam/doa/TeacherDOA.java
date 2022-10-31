@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional
 public interface TeacherDOA extends CrudRepository<Teacher, Long> {
 
     @NonNull
@@ -24,7 +25,7 @@ public interface TeacherDOA extends CrudRepository<Teacher, Long> {
             "WHERE t.id = :id", nativeQuery = true)
     Teacher getTeacherById(@Param("id") Long id);
 
-    @Transactional
+//    @Transactional
     @Query(value = "SELECT * FROM Teacher ", nativeQuery = true)
     List<Teacher>findAllTeacher();
 

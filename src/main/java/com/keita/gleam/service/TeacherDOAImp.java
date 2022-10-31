@@ -83,11 +83,11 @@ public class TeacherDOAImp {
         return addressDOAImp.save(findAddress.get(), message);
     }
 
-    public ResponseEntity<?> removeAddress(Long id, Address address) {
+    public ResponseEntity<?> removeAddress(Long id, Long aid) {
         Teacher teacher = findByID(id);
-        teacher.removeAddress(address);
         teacherDOA.save(teacher);
-        return addressDOAImp.deleteAddress(address);
+        Address address = teacher.findAddress(aid);
+        return addressDOAImp.deleteAddress(aid, address);
     }
 
     public ResponseEntity<?> updateSetCourse(Long id, Long courseID, Course course) {
