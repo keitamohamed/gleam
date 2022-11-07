@@ -45,7 +45,7 @@ public class StudentController {
         return studentDOAImp.addMajor(id, major);
     }
 
-    @PutMapping(value = {"/add_course/{id}/{cid}"})
+    @PutMapping(value = {"/enroll-in-course/{id}/{cid}"})
     public ResponseEntity<?> addCourse(@PathVariable Long id, @PathVariable Long cid, HttpServletResponse response) {
         return studentDOAImp.addCourse(id, cid, response);
     }

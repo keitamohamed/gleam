@@ -74,7 +74,8 @@ public class MajorDOAImp {
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
         message = String.format("No major found for id %s", id);
-        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        ResponseMessage responseMessage = new ResponseMessage(message, HttpStatus.OK.name(), HttpStatus.OK.value());
+        return new ResponseEntity<>(responseMessage, HttpStatus.NOT_FOUND);
     }
 
     public Major setSubject(Long id, Subject subject, HttpServletResponse response) {
