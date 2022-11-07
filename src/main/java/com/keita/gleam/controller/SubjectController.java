@@ -42,7 +42,6 @@ public class SubjectController {
     @PutMapping(path = {"/update/{id}/{mID}"})
     public ResponseEntity<?> setMajor(@PathVariable Long id, @PathVariable Long mID, HttpServletResponse response) {
         Optional<Subject> subject = subjectDOAImp.findByID(id);
-        System.out.println("ID " + subject.get().getName());
         Major major = majorDOAImp.setSubject(mID, subject.get(), response);
         return subjectDOAImp.update(id, major);
     }
